@@ -1,0 +1,35 @@
+# Uncomment the next line to define a global platform for your project
+# platform :ios, '9.0'
+
+target 'OC_React' do
+  # Uncomment the next line if you're using Swift or would like to use dynamic frameworks
+  # use_frameworks!
+
+  # Pods for OC_React
+
+  # 'node_modules'目录一般位于根目录中
+  # 但是如果你的结构不同，那你就要根据实际路径修改下面的`:path`
+  pod 'React', :path => '../node_modules/react-native', :subspecs => [
+    'Core',
+    'DevSupport', # 如果RN版本 >= 0.43，则需要加入此行才能开启开发者菜单
+    'RCTText',
+    'RCTNetwork',
+    'RCTWebSocket',
+    'BatchedBridge',
+    'RCTImage',
+    'RCTAnimation',
+    'RCTLinkingIOS',
+ ]
+  pod "yoga", :path => "../node_modules/react-native/ReactCommon/yoga"
+
+  target 'OC_ReactTests' do
+    inherit! :search_paths
+    # Pods for testing
+  end
+
+  target 'OC_ReactUITests' do
+    inherit! :search_paths
+    # Pods for testing
+  end
+
+end

@@ -5,7 +5,17 @@ import ActionButton from 'react-native-action-button';
 import {StackNavigator, } from 'react-navigation';
 import RCTDeviceEventEmitter from 'RCTDeviceEventEmitter' ;
 import AlertSelected from "./AlertCustom";
-import {lolListApi, bilibiliApi} from './RemoteManager'
+import {
+    lolListApi,
+    bilibiliApi,
+    lolActivityApi,
+    lolAllChannel,
+    lolBannerApi,
+    lolDingyueApi,
+    lolGonglueApi,
+    lolGuanfangApi,
+    lolYule,
+} from './RemoteManager'
 import {WebViewController, SecondViewController} from './App'
 import PLBanner from './PLBanner'
 import PLSectionHeaderView from './PLSectionHeaderView'
@@ -65,6 +75,7 @@ class RNHighScores extends React.Component {
             style:{opacity:value}
         })
     }
+
     render(){
         return(
             <View style={styles.divLayout}>
@@ -149,14 +160,11 @@ export default class BaseNavigationController extends React.Component {
 
     _bannerRemote = ()=> {
         return(
-            fetch(bilibiliApi).then((response)=>response.json())
+            fetch(lolBannerApi).then((response)=>response.json())
                 .then((responseJson)=>{
-                    var arr = new Array();
-                    var data = responseJson.data;
-                    var banner = data[0];
-                    arr = banner.banner_item;
+                    var banner = responseJson.list;
                     this.setState({
-                        bannerArr: arr,
+                        bannerArr: banner,
                     })
                     console.log('banner data = ' + this.state.bannerArr)
                 })
@@ -209,10 +217,18 @@ export default class BaseNavigationController extends React.Component {
     _banner = () => {
         return(
             <PLBanner
-                dataSourceArr = {this.state.bannerArr}>
+                dataSourceArr = {this.state.bannerArr}
+                _onPress={(i, url)=>this._bannerOnPress(i, url)}
+            >
 
             </PLBanner>
         )
+    }
+
+    _bannerOnPress(i, url){
+        console.log('i = '+i + '\nurl = ' + url)
+        const {navigate} = this.props.navigation
+        navigate('Web',{url:url, item : i})
     }
 
     _sectionHeader(section){
@@ -281,8 +297,8 @@ export default class BaseNavigationController extends React.Component {
         );
     }
 }
-const onButtonPress = () => {
-    Alert.alert('Button has been pressed!');
+const showAlert = (string) => {
+    Alert.alert(''+stirng);
 };
 
 

@@ -10,9 +10,6 @@ import {
     TouchableHighlight
 } from 'react-native';
 
-const kScreenWidth = Dimensions.get('window').width
-const kScreenHeight = Dimensions.get('window').height
-const naviBarHeight = (kScreenHeight>=812?88:64)
 
 export default class CustomizeNavibar extends React.Component
 {
@@ -46,6 +43,11 @@ export default class CustomizeNavibar extends React.Component
         )
     }
 }
+
+const kScreenWidth = Dimensions.get('window').width
+const kScreenHeight = Dimensions.get('window').height
+const naviBarHeight = (kScreenHeight>=812?88:64)
+
 
 const styles = StyleSheet.create({
     customizeNavibarStye:{

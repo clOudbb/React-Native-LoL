@@ -12,6 +12,7 @@ import {
 } from 'react-native';
 const screenWidth = Dimensions.get('window').width
 const screenHeight = Dimensions.get('window').height
+const naviBarHeight = (screenHeight>=812?88:64)
 
 export default class PLSectionHeaderView extends React.Component
 {
@@ -20,6 +21,7 @@ export default class PLSectionHeaderView extends React.Component
         this.state = {
             dataSourceArr : ['最新', '专栏', '官方', '活动', '攻略','娱乐','收藏'],
             bottomLineControlArr : {'0': true, '1':false, '2': false, '3': false, '4' : false, '5':false,'6':false},
+            _changedHeaderView:false,
         }
         console.log('PLSectionHeaderV Data = ' + this.state.dataSourceArr)
     }
@@ -39,6 +41,51 @@ export default class PLSectionHeaderView extends React.Component
         this.setState({
             bottomLineControlArr:dic
         })
+    }
+
+    _setNativeProps(offsetY){
+        //这里需要加个判断优化，不应该一直执行
+        //但是目前加入的判断效果都不是很好，由于React这里判定比较麻烦。
+        //sectionList header的top判定不会计算ListHeaderCompoent在内
+        //最好使用react-navigation原生的navi就可以使用sectionList自带的悬浮效果
+        //但是目前react-navigation目前理解无法对navibar进行高度自定义（渐变），
+        //所以采用了自定义navibar
+        //需要以后更深理解来解决这里的优化问题
+        let z_offSet = offsetY
+        this._list.setNativeProps({
+            style:{top : z_offSet}
+        })
+        // if (z_offSet === 44 && this.state._changedHeaderView === false)
+        // {
+        //     this._list.setNativeProps({
+        //         style:{top : z_offSet}
+        //     })
+        //     this.setState({
+        //         _changedHeaderView:true,
+        //     })
+        // }
+        // else if (z_offSet < 44 && this.state._changedHeaderView === true)
+        // {
+        //     this._list.setNativeProps({
+        //         style:{top : z_offSet}
+        //     })
+        // }
+        // else if (z_offSet < 44 && this.state._changedHeaderView === false)
+        // {
+        //     this._list.setNativeProps({
+        //         style:{top : z_offSet}
+        //     })
+        // }
+        // else if (z_offSet === 0)
+        // {
+        //     this._list.setNativeProps({
+        //         style:{top : z_offSet}
+        //     })
+        //     this.setState({
+        //         _changedHeaderView:false,
+        //     })
+        // }
+
     }
 
 
@@ -65,6 +112,7 @@ export default class PLSectionHeaderView extends React.Component
                 renderItem={({item, index}) => this._renderItem(item, index)}
                 horizontal={true}
                 showsHorizontalScrollIndicator={false}
+                ref={list=>this._list=list}
 
                 //contentInset={{top:0,left:0,bottom:0,right:screenWidth / 4 * 3}}// 设置他的滑动范围
                 //contentContainerStyle={styles.textContainView}

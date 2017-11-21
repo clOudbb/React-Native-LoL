@@ -48,8 +48,9 @@ var styles = StyleSheet.create({
 
 })
 
-const screenWidth = Dimensions.get('window').width
-const screenHeight = Dimensions.get('window').height
+const screenWidth = Dimensions.get('window').width;
+const screenHeight = Dimensions.get('window').height;
+export const kBannerViewHeight = screenWidth * 1 / 2.1;
 
 export default class PLBanner extends React.Component
 {
@@ -101,7 +102,7 @@ export default class PLBanner extends React.Component
     render(){
         var arr = this.state.dataSourceArr
         return(
-            <Swiper style={styles.wrapper} showsButtons={false} height={screenWidth * 1 / 3.2}
+            <Swiper style={styles.wrapper} showsButtons={false} height={kBannerViewHeight}
                     autoplay={true}
                     paginationStyle={styles.pageControlStyle}
                     activeDotColor='#ffffff'

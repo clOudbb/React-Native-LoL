@@ -17,7 +17,7 @@ import {
     lolYule,
 } from './RemoteManager'
 import {WebViewController, SecondViewController} from './App'
-import PLBanner from './PLBanner'
+import PLBanner,{kBannerViewHeight} from './PLBanner'
 import PLSectionHeaderView from './PLSectionHeaderView'
 import CustomizeNaviBar from './CustomizeNaviBar'
 
@@ -261,6 +261,19 @@ export default class BaseNavigationController extends React.Component {
         console.log('opacity = '+ value)
 
         this.props.onScrollCall(value)
+        let missionOffset = kBannerViewHeight - 44;
+        if (contentOffsetY >= missionOffset && contentOffsetY < kBannerViewHeight)
+        {
+            this._sectionHeaderView._setNativeProps(contentOffsetY - missionOffset)
+        }
+        else if (contentOffsetY < missionOffset)
+        {
+            this._sectionHeaderView._setNativeProps(0)
+        }
+        else if (contentOffsetY >= kBannerViewHeight)
+        {
+            this._sectionHeaderView._setNativeProps(44)
+        }
     }
 
     render()
@@ -306,6 +319,7 @@ const showAlert = (string) => {
 const naviBarHeight = (kScreenHeight>=812?88:64)
 const tabBarHeight = (kScreenHeight>=812?83:49)
 const cellMargin = 10;
+const tableViewTop = (kScreenHeight>=812?44:0)
 const styles = StyleSheet.create({
     container: {
         flex: 1,
@@ -332,7 +346,7 @@ const styles = StyleSheet.create({
 
 
     tableViewLayout: {
-        marginTop:84,
+        marginTop:tableViewTop,
         marginBottom:0,
         marginLeft:0,
         marginRight:0,

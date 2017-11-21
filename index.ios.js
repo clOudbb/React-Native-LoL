@@ -40,7 +40,6 @@ import {
     LayoutAnimation,
     RefreshControl,
     SectionList,
-
 } from 'react-native';
 
 /*
@@ -55,7 +54,6 @@ import {
  />
  */
 
-const selectedArr = ["拍照", "图库"];
 const kScreenWidth = Dimensions.get('window').width
 const kScreenHeight = Dimensions.get('window').height
 
@@ -281,7 +279,7 @@ export default class BaseNavigationController extends React.Component {
         return (
             <View style={styles.divLayout}>
                 <SectionList ref={(c)=>this._sectionList = c}
-                    data={this.state.dataSourceArr}
+                             data={this.state.dataSourceArr}
                              ListHeaderComponent = {()=> this._banner()}
                              renderSectionHeader={({section}) => (this._sectionHeader())}
                              style={styles.tableViewLayout}
@@ -303,8 +301,8 @@ export default class BaseNavigationController extends React.Component {
                                  />
                              }
 
-                />
-
+                >
+                </SectionList>
             </View>
 
         );

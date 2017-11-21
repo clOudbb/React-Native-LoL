@@ -48,7 +48,7 @@ export default class PLSectionHeaderView extends React.Component
         //但是目前加入的判断效果都不是很好，由于React这里判定比较麻烦。
         //sectionList header的top判定不会计算ListHeaderCompoent在内
         //最好使用react-navigation原生的navi就可以使用sectionList自带的悬浮效果
-        //但是目前react-navigation目前理解无法对navibar进行高度自定义（渐变），
+        //但是目前对react-navigation的理解无法对navibar进行高度自定义（渐变），
         //所以采用了自定义navibar
         //需要以后更深理解来解决这里的优化问题
         let z_offSet = offsetY

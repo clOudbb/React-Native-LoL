@@ -14,10 +14,10 @@ import {
 } from 'react-native';
 
 import Swiper from 'react-native-swiper';
-import TouchableItem from "react-navigation/src/views/TouchableItem";
 
 var styles = StyleSheet.create({
     wrapper: {
+        backgroundColor:'white'
     },
     slide1: {
         flex: 1,
@@ -27,15 +27,13 @@ var styles = StyleSheet.create({
     },
     slide2: {
         flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-        backgroundColor: '#97CAE5',
     },
     slide3: {
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-        backgroundColor: '#92BBD9',
+        position:'absolute',
+        marginTop:0,
+        marginBottom:0,
+        marginLeft:50,
+        marginRight:50,
     },
     text: {
         color: '#fff',
@@ -75,15 +73,16 @@ export default class PLBanner extends React.Component
             var model = dataArr[i]
             var url = model.article_url
             console.log(''+ url + '\n i=' + i);
-            //这里注意ES5的循环体问题，可以用如下方法解决，或者使用es6的 let来接收 model url
+            //这里注意ES5的循环体问题，可以用如下方法解决，或者使用es6的 let来接收 model url i
+            //注意Image网络图片必须指定w h
             var push = (i, model, url)=>{
 
                 controlArr.push(
-                    <TouchableHighlight style={{flex:1,}} onPress={()=>this.props._onPress(i, url)}  key={i}>
+                    <TouchableHighlight style={styles.slide2} onPress={()=>this.props._onPress(i, url)}  key={i}>
                         <View style={styles.slide1}>
                             <Image
                                 style={{width:screenWidth,height:200}}
-                                resizeMode='contain'
+                                resizeMode='cover'
                                 source={{uri:model.image_url_big}}
                             />
                         </View>
@@ -102,13 +101,13 @@ export default class PLBanner extends React.Component
     render(){
         var arr = this.state.dataSourceArr
         return(
-            <Swiper style={styles.wrapper} showsButtons={false} height={kBannerViewHeight}
-                    autoplay={true}
-                    paginationStyle={styles.pageControlStyle}
-                    activeDotColor='#ffffff'
-            >
-                {this._dataHandle(arr)}
-            </Swiper>
+                <Swiper style={styles.wrapper} showsButtons={false} height={kBannerViewHeight}
+                        autoplay={true}
+                        paginationStyle={styles.pageControlStyle}
+                        activeDotColor='#ffffff'
+                >
+                    {this._dataHandle(arr)}
+                </Swiper>
         )
     }
 }

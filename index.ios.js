@@ -7,19 +7,16 @@ import RCTDeviceEventEmitter from 'RCTDeviceEventEmitter' ;
 import AlertSelected from "./AlertCustom";
 import {
     lolListApi,
-    bilibiliApi,
-    lolActivityApi,
-    lolAllChannel,
     lolBannerApi,
-    lolDingyueApi,
-    lolGonglueApi,
-    lolGuanfangApi,
-    lolYule,
+    _handleCount,
+    kTouchBannerNotification,
+    kContainScrollViewScroll,
 } from './RemoteManager'
 import {WebViewController, SecondViewController} from './App'
 import PLBanner,{kBannerViewHeight} from './PLBanner'
 import PLSectionHeaderView from './PLSectionHeaderView'
 import CustomizeNaviBar from './CustomizeNaviBar'
+import LOLGeneralController from './GeneralController/LOLGeneralController'
 
 import {
     AppRegistry,
@@ -40,7 +37,9 @@ import {
     LayoutAnimation,
     RefreshControl,
     SectionList,
+    ScrollView,
 } from 'react-native';
+import {GeneralControllerCell} from "./GeneralController/Views/GeneralControllerCell";
 
 /*
  <NavigatorIOS
@@ -66,6 +65,9 @@ class RNHighScores extends React.Component {
         console.log('screenH' + kScreenHeight)
     }
 
+    componentDidMount() {
+
+    }
 
     _onScroll(value){
         console.log('scroll call back value ='+value)
@@ -122,7 +124,13 @@ export default class BaseNavigationController extends React.Component {
 
     componentDidMount(){
         this._datahandle()
+        this.notifi = RCTDeviceEventEmitter.addListener(kTouchBannerNotification, (index)=>{
+            this._scrollView.scrollTo(0, index* kScreenWidth)
+        })
+    }
 
+    componentWillUnmount() {
+        this.notifi.remove()
     }
 
     _datahandle = ()=> {
@@ -186,29 +194,10 @@ export default class BaseNavigationController extends React.Component {
 
 
         return (
-            <View style={styles.cellLaytout}>
-
-                <TouchableHighlight style={styles.cellTouchableStyle}
-                                    onPress={()=>{this._touchAction(item, index)}}>
-                    <View style={styles.cellContainStyle}>
-
-                        <Image style={styles.imageViewLayout}
-                               source={{uri:item.image_url_small}}
-                        />
-                        <View style={styles.cellTextLayout}>
-                            <Text style={styles.textLayout} numberOfLines={1}>{item.title}</Text>
-                            <Text style={styles.summaryTextStyle} numberOfLines={2}>{item.summary}</Text>
-                            <Text style={[styles.summaryTextStyle, styles.dateTextStyle]}>
-                                {item.publication_date + ' '}
-                                <Text style={styles.summaryTextStyle}>{this._handleCount(item) + '万阅'}</Text>
-                            </Text>
-                        </View>
-
-                    </View>
-                </TouchableHighlight>
-
-            </View>
-
+            <GeneralControllerCell item={item}
+                                   index={index}
+                                   _touchAction={(item, index)=>this._touchAction(item, index)}>
+            </GeneralControllerCell>
         )
     }
 
@@ -229,21 +218,6 @@ export default class BaseNavigationController extends React.Component {
         navigate('Web',{url:url, item : i})
     }
 
-    _sectionHeader(section){
-        return(
-            <PLSectionHeaderView ref={(header)=>this._sectionHeaderView=header}>
-
-            </PLSectionHeaderView>
-        )
-    }
-
-    _handleCount = (item)=> {
-        var count = 10;
-        for (var i = 0; i < item.pv.length - 2; i++) {
-            count = count * 10;
-        }
-        return Math.round(item.pv / count)
-    }
 
     keyExtractor(item, index){
         return item.title
@@ -259,51 +233,73 @@ export default class BaseNavigationController extends React.Component {
         console.log('opacity = '+ value)
 
         this.props.onScrollCall(value)
-        let missionOffset = kBannerViewHeight - 44;
-        if (contentOffsetY >= missionOffset && contentOffsetY < kBannerViewHeight)
-        {
-            this._sectionHeaderView._setNativeProps(contentOffsetY - missionOffset)
-        }
-        else if (contentOffsetY < missionOffset)
-        {
-            this._sectionHeaderView._setNativeProps(0)
-        }
-        else if (contentOffsetY >= kBannerViewHeight)
-        {
-            this._sectionHeaderView._setNativeProps(44)
-        }
+        let missionOffset = kBannerViewHeight - statusBarHeight;
+        // if (contentOffsetY >= missionOffset && contentOffsetY < kBannerViewHeight)
+        // {
+        //     this._sectionHeaderView._setNativeProps(contentOffsetY - missionOffset)
+        // }
+        // else if (contentOffsetY < missionOffset)
+        // {
+        //     this._sectionHeaderView._setNativeProps(0)
+        // }
+        // else if (contentOffsetY >= kBannerViewHeight)
+        // {
+        //     this._sectionHeaderView._setNativeProps(naviBarHeight - statusBarHeight)
+        // }
+    }
+
+    _scrollViewOnScroll(e){
+        let contentOffsetX = e.nativeEvent.contentOffset.x
+        let index = contentOffsetX / kScreenWidth
+        if (index % 1 !== 0) return;
+        RCTDeviceEventEmitter.emit(kContainScrollViewScroll, index)
     }
 
     render()
     {
         return (
-            <View style={styles.divLayout}>
-                <SectionList ref={(c)=>this._sectionList = c}
-                             data={this.state.dataSourceArr}
-                             ListHeaderComponent = {()=> this._banner()}
-                             renderSectionHeader={({section}) => (this._sectionHeader())}
-                             style={styles.tableViewLayout}
-                             sections={[ // 不同section渲染相同类型的子组件
-                                 {data:this.state.dataSourceArr, renderItem:({item, index}) => this._renderItem(item, index)},
-                             ]}
-                             keyExtractor = {(item, index)=>this.keyExtractor(item, index)}
-                             onScroll={(e)=>{this._onScroll(e)}}
-                             scrollEventThrottle={1}  //监听频率
-                             refreshControl={
-                                 <RefreshControl
-                                     refreshing={this.state.isRefreshing}
-                                     onRefresh={this._onRefresh}
-                                     tintColor="#ffffff"
-                                     title="Loading..."
-                                     titleColor="#000000"
-                                     colors={['#ff0000', '#00ff00', '#0000ff']}
-                                     progressBackgroundColor="#ffff00"
-                                 />
-                             }
+            <ScrollView style = {{
+                backgroundColor:'gray',
+            }}
+                        horizontal={true}
+                        showsHorizontalScrollIndicator={false}
+                        ref={list=>this._scrollView=list}
+                        pagingEnabled={true} onScroll={(e)=>this._scrollViewOnScroll(e)}>
 
-                >
-                </SectionList>
-            </View>
+                <View style={styles.divLayout}>
+
+                    <SectionList ref={(c)=>this._sectionList = c}
+                                 data={this.state.dataSourceArr}
+                                 ListHeaderComponent = {()=> this._banner()}
+                        // renderSectionHeader={({section}) => (this._sectionHeader())}
+                                 style={styles.tableViewLayout}
+                                 sections={[ // 不同section渲染相同类型的子组件
+                                     {data:this.state.dataSourceArr, renderItem:({item, index}) => this._renderItem(item, index)},
+                                 ]}
+                                 keyExtractor = {(item, index)=>this.keyExtractor(item, index)}
+                                 onScroll={(e)=>{this._onScroll(e)}}
+                                 scrollEventThrottle={1}  //监听频率
+                                 refreshControl={
+                                     <RefreshControl
+                                         refreshing={this.state.isRefreshing}
+                                         onRefresh={this._onRefresh}
+                                         tintColor="#ffffff"
+                                         title="Loading..."
+                                         titleColor="#000000"
+                                         colors={['#ff0000', '#00ff00', '#0000ff']}
+                                         progressBackgroundColor="#ffff00"
+                                     />
+                                 }
+
+                    >
+                    </SectionList>
+                </View>
+
+                <LOLGeneralController navigation={this.props.navigation}
+                                      onScroll={(e)=>this._onScroll(e)}>
+
+                </LOLGeneralController>
+            </ScrollView>
 
         );
     }
@@ -312,12 +308,11 @@ const showAlert = (string) => {
     Alert.alert(''+stirng);
 };
 
-
-
 const naviBarHeight = (kScreenHeight>=812?88:64)
 const tabBarHeight = (kScreenHeight>=812?83:49)
 const cellMargin = 10;
 const tableViewTop = (kScreenHeight>=812?44:0)
+const statusBarHeight = (kScreenHeight>=812?44:20)
 const styles = StyleSheet.create({
     container: {
         flex: 1,
@@ -352,11 +347,13 @@ const styles = StyleSheet.create({
     },
 
     divLayout:{
-        flex:1,
+        // flex:1,
         flexDirection:'row',
         justifyContent:'center',
         alignItems:'flex-start',
         backgroundColor:'gray',
+        width:kScreenWidth,
+        height:kScreenHeight
     },
 
 
@@ -374,10 +371,6 @@ const styles = StyleSheet.create({
         flex:1,
         justifyContent:'center',
         alignItems:'center',
-        marginTop:5,
-        marginBottom:0,
-        marginLeft:cellMargin,
-        marginRight:cellMargin,
     },
 
     cellContainStyle:{
@@ -426,10 +419,10 @@ const styles = StyleSheet.create({
     },
 
     imageViewLayout:{
-        width:60,
-        height: 60,
-        borderRadius:0,
-        marginLeft: cellMargin,
+        width:90,
+        height: 70,
+        borderRadius:4,
+        marginRight: cellMargin,
     },
 
     cellButtonLaytout:{
@@ -466,6 +459,7 @@ const styles = StyleSheet.create({
         top:0,
     }
 });
+
 
 const StackNavigatorConfig = {
     // initialRouteName: 'Home',

@@ -8,36 +8,56 @@ import {
     View,
     Dimensions,
     SectionList,
-    TouchableHighlight
+    TouchableHighlight,
+    ScrollView,
+    Animated
 } from 'react-native';
+import {kTouchBannerNotification, kContainScrollViewScroll} from './RemoteManager'
+import RCTDeviceEventEmitter from 'RCTDeviceEventEmitter' ;
+
 const screenWidth = Dimensions.get('window').width
 const screenHeight = Dimensions.get('window').height
 const naviBarHeight = (screenHeight>=812?88:64)
-
+const _animLineLeft = 15
 export default class PLSectionHeaderView extends React.Component
 {
     constructor(props){
         super(props)
         this.state = {
-            dataSourceArr : ['最新', '专栏', '官方', '活动', '攻略','娱乐','收藏'],
-            bottomLineControlArr : {'0': true, '1':false, '2': false, '3': false, '4' : false, '5':false,'6':false},
+            dataSourceArr : ['最新', '季前赛','英雄', '视频', '专栏'],
+            bottomLineControlArr : {'0': true, '1':false, '2': false, '3': false, '4' : false},
             _changedHeaderView:false,
+            _linePositionX : new Animated.Value(_animLineLeft),
         }
         console.log('PLSectionHeaderV Data = ' + this.state.dataSourceArr)
     }
-    componentDidMount(){
 
+    componentDidMount(){
+        this.noti = RCTDeviceEventEmitter.addListener(kContainScrollViewScroll, (index)=>{
+            this._touchAction(index)
+        })
+    }
+
+    componentWillUnmount() {
+        this.noti.remove()
     }
 
     _touchAction(index) {
         var dic = this.state.bottomLineControlArr
-        for (var i = 0;i < Object.keys(dic).length;i++){
+        let value = 0;
+        for (let i = 0;i < Object.keys(dic).length;i++){
             if (i == index) {
                 dic[index] = true
+                value = index
+                RCTDeviceEventEmitter.emit(kTouchBannerNotification, index)
             } else {
                 dic[i] = false
             }
         }
+        Animated.timing(this.state._linePositionX,{
+            toValue: value * screenWidth / 4 + _animLineLeft,
+            duration:350,  //时间是毫秒
+        }).start()
         this.setState({
             bottomLineControlArr:dic
         })
@@ -89,36 +109,46 @@ export default class PLSectionHeaderView extends React.Component
     }
 
 
-    _renderItem(item, index){
-        // console.log('touch index = ' + index)
-        return(
-            <TouchableHighlight style={{flex:1}}
-                                onPress={()=>this._touchAction(index)}>
-                <View style={styles.textContainView}>
-                    <Text style={styles.textLabelStyle}>{item}</Text>
-                    {
-                        !this.state.bottomLineControlArr[index]?null:<View style={styles.bottomLineStyle}></View>
-                    }
-                </View>
-            </TouchableHighlight>
-        )
+    _renderItem(){
+        var itemArr = new Array()
+        let arr = this.state.dataSourceArr
+        for (let index = 0; index < arr.length;index++)
+        {
+            let item = arr[index]
+            itemArr.push(
+                <TouchableHighlight style={{flex:1}}
+                                    onPress={()=>this._touchAction(index)} key={index}>
+                    <View style={styles.textContainView}>
+                        <Text style={styles.textLabelStyle}>{item}</Text>
+                    </View>
+                </TouchableHighlight>
+            )
+        }
+        return itemArr
     }
 
     render(){
         return(
-            <SectionList
-                style = {styles.sectionListStyle}
-                sections = {[{data:this.state.dataSourceArr}]}
-                renderItem={({item, index}) => this._renderItem(item, index)}
-                horizontal={true}
-                showsHorizontalScrollIndicator={false}
-                ref={list=>this._list=list}
 
-                //contentInset={{top:0,left:0,bottom:0,right:screenWidth / 4 * 3}}// 设置他的滑动范围
-                //contentContainerStyle={styles.textContainView}
-            >
-
-            </SectionList>
+            <ScrollView style = {styles.sectionListStyle}
+                        // sections = {[{data:this.state.dataSourceArr}]}
+                        // renderItem={({item, index}) => this._renderItem(item, index)}
+                        horizontal={true}
+                        showsHorizontalScrollIndicator={false}
+                        ref={list=>this._list=list}>
+                {
+                    this._renderItem()
+                }
+                <Animated.View style={{
+                    backgroundColor:'red' ,
+                    height:2,
+                    width:screenWidth / 4 - 30,
+                    position:'absolute',
+                    left:this.state._linePositionX,
+                    bottom:0,
+                }}>
+                </Animated.View>
+            </ScrollView>
         )
     }
 }
@@ -126,7 +156,7 @@ export default class PLSectionHeaderView extends React.Component
 var styles = StyleSheet.create({
     sectionListStyle: {
         height:40,
-        backgroundColor:'#ffffff',
+        backgroundColor:'white',
         marginTop:0,
         marginRight:0,
         marginLeft:0,

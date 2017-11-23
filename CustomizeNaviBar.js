@@ -2,6 +2,7 @@
  * Created by zhangzhenghong on 2017/11/17.
  */
 import React, { Component } from 'react';
+import PLSectionHeaderView from './PLSectionHeaderView'
 import {
     StyleSheet,
     Text,
@@ -29,17 +30,33 @@ export default class CustomizeNavibar extends React.Component
         })
     }
 
+    _sectionHeader(section){
+        return(
+            <PLSectionHeaderView ref={(header)=>this._sectionHeaderView=header}
+                                 style={styles.bannerStyle}>
+
+            </PLSectionHeaderView>
+        )
+    }
+
     render(){
         return(
             <View style={styles.customizeNavibarStye} ref={(vi)=>this._vi=vi}>
                 <View style={styles.containViewStyle}>
-                    <View style={styles.titleContainViewStyle}>
-                        <Text style={styles.titleStyle}>
-                            Main
-                        </Text>
+                    <View style={{width:30, height:30}}>
                     </View>
+                    {this._sectionHeader()}
                 </View>
             </View>
+            // {/*<View style={styles.customizeNavibarStye} ref={(vi)=>this._vi=vi}>*/}
+            //     {/*<View style={styles.containViewStyle}>*/}
+            //         {/*<View style={styles.titleContainViewStyle}>*/}
+            //             {/*<Text style={styles.titleStyle}>*/}
+            //                 {/*Main*/}
+            //             {/*</Text>*/}
+            //         {/*</View>*/}
+            //     {/*</View>*/}
+            // {/*</View>*/}
         )
     }
 }
@@ -47,7 +64,7 @@ export default class CustomizeNavibar extends React.Component
 const kScreenWidth = Dimensions.get('window').width
 const kScreenHeight = Dimensions.get('window').height
 const naviBarHeight = (kScreenHeight>=812?88:64)
-
+const statusBarHeight = (kScreenHeight>=812?44:20)
 
 const styles = StyleSheet.create({
     customizeNavibarStye:{
@@ -62,12 +79,12 @@ const styles = StyleSheet.create({
     },
 
     containViewStyle:{
-        flex:1,
-        marginTop:0,
-        marginBottom:0,
+        left:0,
+        right:0,
+        bottom:0,
+        top:statusBarHeight,
         flexDirection:'row',
-        justifyContent:'center',
-        alignItems:'center',
+        alignItems:'center'
     },
 
     titleContainViewStyle:{
@@ -85,4 +102,12 @@ const styles = StyleSheet.create({
         top:8,
         fontWeight:'500',
     },
+
+    bannerStyle:{
+        position:'absolute',
+        top:20,
+        width:375,
+        height:40,
+        bottom:0,
+    }
 })

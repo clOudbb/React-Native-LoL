@@ -34,19 +34,40 @@ export default class PLSectionHeaderView extends React.Component
 
     componentDidMount(){
         this.noti = RCTDeviceEventEmitter.addListener(kContainScrollViewScroll, (index)=>{
-            this._touchAction(index)
+            this.__touchAction(index)
         })
     }
 
     componentWillUnmount() {
         this.noti.remove()
     }
+    //防止通知闭环
+    __touchAction(index){
+        var dic = this.state.bottomLineControlArr
+        let value = 0;
+        for (let i = 0;i < Object.keys(dic).length;i++){
+            if (i === index) {
+                dic[index] = true
+                value = index
+            } else {
+                dic[i] = false
+            }
+        }
+        Animated.timing(this.state._linePositionX,{
+            toValue: value * screenWidth / 4 + _animLineLeft,
+            duration:350,  //时间是毫秒
+        }).start()
+        this.setState({
+            bottomLineControlArr:dic
+        })
+    }
 
     _touchAction(index) {
         var dic = this.state.bottomLineControlArr
         let value = 0;
         for (let i = 0;i < Object.keys(dic).length;i++){
-            if (i == index) {
+            if (i === index) {
+                console.log('allways resolve')
                 dic[index] = true
                 value = index
                 RCTDeviceEventEmitter.emit(kTouchBannerNotification, index)

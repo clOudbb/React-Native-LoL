@@ -7,7 +7,8 @@ import {
     kScreenHeight,
     kScreenWidth,
     generalStyles,
-    cellMargin
+    cellMargin,
+    cellSeparationLine,
 } from '../../RemoteManager'
 
 import {
@@ -59,16 +60,7 @@ export default class BigImageCell extends React.Component
                         {item.author}
                     </Text>
                 </View>
-                <View style={{
-                    position:'absolute',
-                    backgroundColor:'#cccccc',
-                    height:0.5,
-                    left:20,
-                    right:20,
-                    bottom:0
-                }}>
-
-                </View>
+                    {cellSeparationLine()}
             </View>
             </TouchableHighlight>
         )

@@ -63,6 +63,9 @@ class RNHighScores extends React.Component {
         console.log('view did load')
 
         console.log('screenH' + kScreenHeight)
+        this.state = {
+            naviBarHidden:false,
+        }
     }
 
     componentDidMount() {
@@ -71,9 +74,30 @@ class RNHighScores extends React.Component {
 
     _onScroll(value){
         console.log('scroll call back value ='+value)
-        this._naviBar._setNativeProps({
-            style:{opacity:value}
-        })
+        //这里为了实现navibar隐藏，用了setState去控制render重新渲染，但是实际效果不是很理想可能有闪屏情况
+        //而且也不知性能是否会有影响
+        //目前理解为了实现隐藏效果只能这样操作
+        //单纯修改opacity在React中只是单纯降低了控件透明度，
+        //但是控件还是占用空间，就是看似透明但是还可以点击
+        if (this._naviBar) {
+            this._naviBar._setNativeProps({
+                style:{opacity:value}
+            })
+        }
+
+        if (value === 0) {
+            if (this.state.naviBarHidden === false) {
+                this.setState({
+                    naviBarHidden:true,
+                })
+            }
+        } else {
+            if (this.state.naviBarHidden === true) {
+                this.setState({
+                    naviBarHidden:false,
+                })
+            }
+        }
     }
 
     render(){
@@ -93,10 +117,9 @@ class RNHighScores extends React.Component {
                                           onScrollCall={(value)=>this._onScroll(value)}
                 >
                 </BaseNavigationController>
-                <CustomizeNaviBar ref={(nv) => this._naviBar = nv}>
-
-                </CustomizeNaviBar>
-
+                {
+                    this.state.naviBarHidden?null:<CustomizeNaviBar ref={(nv) => this._naviBar = nv}/>
+                }
             </View>
         );
     }
@@ -264,7 +287,8 @@ export default class BaseNavigationController extends React.Component {
                         horizontal={true}
                         showsHorizontalScrollIndicator={false}
                         ref={list=>this._scrollView=list}
-                        pagingEnabled={true} onScroll={(e)=>this._scrollViewOnScroll(e)}>
+                        pagingEnabled={true} onScroll={(e)=>this._scrollViewOnScroll(e)}
+                        scrollEventThrottle={1}>
 
                 <View style={styles.divLayout}>
 

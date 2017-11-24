@@ -6,7 +6,8 @@ import React,{Component, PropTypes} from 'react';
 import {
     fetch,
     StyleSheet,
-    Dimensions
+    Dimensions,
+    View,
 } from 'react-native';
 
 
@@ -69,6 +70,24 @@ export const _handleCount = (item)=> {
         count = count * 10;
     }
     return Math.round(item.pv / count)
+}
+/**
+ * cell分割线
+ * @returns {XML}
+ */
+export const cellSeparationLine = ()=>{
+    return (
+        <View style={{
+            position:'absolute',
+            backgroundColor:'#cccccc',
+            height:0.5,
+            left:20,
+            right:20,
+            bottom:0
+        }}>
+
+        </View>
+    )
 }
 
 /**

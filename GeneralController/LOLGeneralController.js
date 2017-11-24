@@ -39,6 +39,7 @@ import {
 } from 'react-native';
 import {GeneralControllerCell} from "./Views/GeneralControllerCell";
 import BigImageCell from './Views/BigImageCell'
+import VersionChangesHeadView from "./Views/VersionChangesHeadView";
 
 const kScreenWidth = Dimensions.get('window').width
 const kScreenHeight = Dimensions.get('window').height
@@ -121,6 +122,11 @@ export default class LOLGeneralController extends React.Component
             <View style={styles.container}>
                 <SectionList ref={(c)=>this._sectionList = c}
                              data={this.state.dataSourceArr}
+                             ListHeaderComponent={()=>{
+                                 return (
+                                     <VersionChangesHeadView/>
+                                 )
+                             }}
                              // ListHeaderComponent = {()=> this._banner()}
                     // renderSectionHeader={({section}) => (this._sectionHeader())}
                              style={styles.tableViewLayout}

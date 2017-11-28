@@ -11,6 +11,8 @@
     "react-native-action-button": "^2.8.0",
     "react-native-carousel-pager": "^1.1.1",
     "react-native-swiper": "^1.5.13",
-    "react-navigation": "^1.0.0-beta.15"
+    "react-navigation": "^1.0.0-beta.15",
+    "react-redux": "^5.0.6",
+    "redux": "^3.7.2"
   }
 }

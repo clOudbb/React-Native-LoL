@@ -12,6 +12,10 @@ import {
     ScrollView,
     Animated
 } from 'react-native';
+import {
+    store,
+    _scrollViewState,
+} from './DataManager/ReduxManager'
 import {kTouchBannerNotification, kContainScrollViewScroll} from './RemoteManager'
 import RCTDeviceEventEmitter from 'RCTDeviceEventEmitter' ;
 
@@ -36,10 +40,21 @@ export default class PLSectionHeaderView extends React.Component
         this.noti = RCTDeviceEventEmitter.addListener(kContainScrollViewScroll, (index)=>{
             this.__touchAction(index)
         })
+
+    }
+
+    componentWillMount() {
+        this.unlistener = store.subscribe(()=>{this._subscribeAction()})
+    }
+
+    _subscribeAction(){
+        const state = store.getState()
+        console.log('value ===== '+state.value)
     }
 
     componentWillUnmount() {
         this.noti.remove()
+        this.unlistener()
     }
     //防止通知闭环
     __touchAction(index){
@@ -57,9 +72,6 @@ export default class PLSectionHeaderView extends React.Component
             toValue: value * screenWidth / 4 + _animLineLeft,
             duration:350,  //时间是毫秒
         }).start()
-        this.setState({
-            bottomLineControlArr:dic
-        })
     }
 
     _touchAction(index) {
@@ -79,9 +91,6 @@ export default class PLSectionHeaderView extends React.Component
             toValue: value * screenWidth / 4 + _animLineLeft,
             duration:350,  //时间是毫秒
         }).start()
-        this.setState({
-            bottomLineControlArr:dic
-        })
     }
 
     _setNativeProps(offsetY){

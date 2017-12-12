@@ -16,19 +16,19 @@ import {
 import {
     connect,
 } from 'react-redux'
+import BaseNavigationController from '../index.ios'
 
-export const _scrollViewState = '_scrollViewState'
+export const _scrollViewState = '_scrollViewState'  //底部视图滚动事件
 
 // export const rootReducer = combineReducers({
 //     _scrollViewState : scrollReducerHandle,
 // })
-
+const _animLineLeft = 15
 const initParams = {
-    value : 0,
+    _linePositionX : _animLineLeft
 }
 export const store = createStore(scrollReducerHandle, initParams)
 
-const _animLineLeft = 15
 function scrollReducerHandle(state, action) {
     switch (action.type) {
         case _scrollViewState:
@@ -41,8 +41,16 @@ function scrollReducerHandle(state, action) {
 
 export const reduxScrollValueReducer = (index)=> {
     let v = index * Dimensions.get('window').width / 4 + _animLineLeft
+    // let lineArr = [true, false, false,  false,  false]
+    // for (let i = 0;i < lineArr.count;i++) {
+    //     if (i == index) {
+    //         lineArr[index] = true
+    //     } else {
+    //         lineArr[i] = false
+    //     }
+    // }
     return {
-        value :v,
+        _linePositionX : v,
     }
 }
 
@@ -67,3 +75,20 @@ export const reduxScrollValue = (type, index) =>
  * 目前对react-redux的connect方法和provide还没有理解。
  * react全家桶还有一些控件暂时没有用到
  */
+
+export const mapToState = (state)=>{
+    return {
+        store:store,
+        state,
+    }
+}
+
+export const mapDispatchProps = (dispatch)=>{
+    return {
+        _scrollValue : (type, index)=>{
+            dispatch(reduxScrollValue(type, index))
+        }
+    }
+}
+
+

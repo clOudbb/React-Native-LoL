@@ -10,6 +10,13 @@ import {
     Dimensions,
     TouchableHighlight
 } from 'react-native';
+import {
+    mapDispatchProps,
+    mapToState
+} from './DataManager/ReduxManager'
+import {
+    connect,
+} from 'react-redux'
 
 
 export default class CustomizeNavibar extends React.Component
@@ -32,10 +39,10 @@ export default class CustomizeNavibar extends React.Component
 
     _sectionHeader(section){
         return(
-            <PLSectionHeaderView ref={(header)=>this._sectionHeaderView=header}
+            <SectionHeader ref={(header)=>this._sectionHeaderView=header}
                                  style={styles.bannerStyle}>
 
-            </PLSectionHeaderView>
+            </SectionHeader>
         )
     }
 
@@ -60,6 +67,11 @@ export default class CustomizeNavibar extends React.Component
         )
     }
 }
+
+const SectionHeader = connect(
+    mapToState,
+    mapDispatchProps,
+)(PLSectionHeaderView)
 
 const kScreenWidth = Dimensions.get('window').width
 const kScreenHeight = Dimensions.get('window').height

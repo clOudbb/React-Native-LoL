@@ -12,9 +12,11 @@ import {
     ScrollView,
     Animated
 } from 'react-native';
+
 import {
     store,
     _scrollViewState,
+    _linePositionX,
 } from './DataManager/ReduxManager'
 import {kTouchBannerNotification, kContainScrollViewScroll} from './RemoteManager'
 import RCTDeviceEventEmitter from 'RCTDeviceEventEmitter' ;
@@ -23,38 +25,48 @@ const screenWidth = Dimensions.get('window').width
 const screenHeight = Dimensions.get('window').height
 const naviBarHeight = (screenHeight>=812?88:64)
 const _animLineLeft = 15
+
+let linePositionX = new Animated.Value(_animLineLeft)
+
 export default class PLSectionHeaderView extends React.Component
 {
     constructor(props){
         super(props)
+        const { store } = props;
+        const state = store.getState();
         this.state = {
             dataSourceArr : ['最新', '季前赛','英雄', '视频', '专栏'],
             bottomLineControlArr : {'0': true, '1':false, '2': false, '3': false, '4' : false},
             _changedHeaderView:false,
-            _linePositionX : new Animated.Value(_animLineLeft),
+            _linePositionX : new Animated.Value(state._linePositionX),
         }
-        console.log('PLSectionHeaderV Data = ' + this.state.dataSourceArr)
+    }
+
+    getReduxState () {
+        const { store } = this.props;
+        const state = store.getState();
+        return state
     }
 
     componentDidMount(){
         this.noti = RCTDeviceEventEmitter.addListener(kContainScrollViewScroll, (index)=>{
             this.__touchAction(index)
         })
-
+        this.unsubscribe = store.subscribe(() =>{
+            const state = this.getReduxState()
+            console.log('positionX = '+ state._linePositionX)
+        });
     }
 
     componentWillMount() {
-        this.unlistener = store.subscribe(()=>{this._subscribeAction()})
+
     }
 
-    _subscribeAction(){
-        const state = store.getState()
-        console.log('value ===== '+state.value)
-    }
 
     componentWillUnmount() {
         this.noti.remove()
-        this.unlistener()
+
+        this.unsubscribe()
     }
     //防止通知闭环
     __touchAction(index){
@@ -72,6 +84,7 @@ export default class PLSectionHeaderView extends React.Component
             toValue: value * screenWidth / 4 + _animLineLeft,
             duration:350,  //时间是毫秒
         }).start()
+        this.props._scrollValue(_scrollViewState, value)
     }
 
     _touchAction(index) {
@@ -91,6 +104,7 @@ export default class PLSectionHeaderView extends React.Component
             toValue: value * screenWidth / 4 + _animLineLeft,
             duration:350,  //时间是毫秒
         }).start()
+        this.props._scrollValue(_scrollViewState, value)
     }
 
     _setNativeProps(offsetY){
@@ -158,6 +172,8 @@ export default class PLSectionHeaderView extends React.Component
     }
 
     render(){
+        const { store } = this.props;
+        const state = store.getState()
         return(
 
             <ScrollView style = {styles.sectionListStyle}

@@ -17,14 +17,17 @@ import PLBanner,{kBannerViewHeight} from './PLBanner'
 import PLSectionHeaderView from './PLSectionHeaderView'
 import CustomizeNaviBar from './CustomizeNaviBar'
 import LOLGeneralController from './GeneralController/LOLGeneralController'
+import LOLSpeicalColumnController from './GeneralController/LOLSpeicalColumnController'
 import {
     store,
     reduxScrollValue,
     _scrollViewState,
+    mapDispatchProps,
+    mapToState
 } from './DataManager/ReduxManager'
 import {
-    Provider,
     connect,
+    Provider,
 } from 'react-redux'
 import {
     AppRegistry,
@@ -111,6 +114,7 @@ class RNHighScores extends React.Component {
 
     render(){
         return(
+
             <View style={styles.divLayout}>
                 {/*<NavigatorIOS*/}
                 {/*initialRoute={{*/}
@@ -122,20 +126,25 @@ class RNHighScores extends React.Component {
                 {/*translucent={false}*/}
                 {/*/>*/}
 
-                <BaseNavigationController navigation={this.props.navigation}
-                                          onScrollCall={(value)=>this._onScroll(value)}
-                >
-                </BaseNavigationController>
-                {
-                    this.state.naviBarHidden?null:<CustomizeNaviBar ref={(nv) => this._naviBar = nv}/>
-                }
+                {/*<BaseNavigationController navigation={this.props.navigation}*/}
+                {/*onScrollCall={(value)=>this._onScroll(value)}*/}
+                {/*>*/}
+                {/*</BaseNavigationController>*/}
+                <Provider store={store}>
+                    <View>
+                    <BaseViewController navigation={this.props.navigation}
+                          onScrollCall={(value)=>this._onScroll(value)}>
+                    </BaseViewController>
+                    {
+                        this.state.naviBarHidden?null:<CustomizeNaviBar ref={(nv) => this._naviBar = nv}/>
+                    }
+                    </View>
+                </Provider>
+
             </View>
         );
     }
-
-
 }
-
 
 export default class BaseNavigationController extends React.Component {
 
@@ -286,62 +295,69 @@ export default class BaseNavigationController extends React.Component {
         if (index % 1 !== 0) return;
         RCTDeviceEventEmitter.emit(kContainScrollViewScroll, index)
 
-        store.dispatch(reduxScrollValue(_scrollViewState, index))
+        this.props._scrollValue(_scrollViewState,index)
     }
 
     render()
     {
         return (
-            <Provider store={store}>
 
-                <ScrollView style = {{
-                    backgroundColor:'gray',
-                }}
-                            horizontal={true}
-                            showsHorizontalScrollIndicator={false}
-                            ref={list=>this._scrollView=list}
-                            pagingEnabled={true} onScroll={(e)=>this._scrollViewOnScroll(e)}
-                            scrollEventThrottle={1}>
+            <ScrollView style = {{
+                backgroundColor:'gray',
+            }}
+                        horizontal={true}
+                        showsHorizontalScrollIndicator={false}
+                        ref={list=>this._scrollView=list}
+                        pagingEnabled={true} onScroll={(e)=>this._scrollViewOnScroll(e)}
+                        scrollEventThrottle={1}>
 
-                    <View style={styles.divLayout}>
+                <View style={styles.divLayout}>
 
-                        <SectionList ref={(c)=>this._sectionList = c}
-                                     data={this.state.dataSourceArr}
-                                     ListHeaderComponent = {()=> this._banner()}
-                            // renderSectionHeader={({section}) => (this._sectionHeader())}
-                                     style={styles.tableViewLayout}
-                                     sections={[ // 不同section渲染相同类型的子组件
-                                         {data:this.state.dataSourceArr, renderItem:({item, index}) => this._renderItem(item, index)},
-                                     ]}
-                                     keyExtractor = {(item, index)=>this.keyExtractor(item, index)}
-                                     onScroll={(e)=>{this._onScroll(e)}}
-                                     scrollEventThrottle={1}  //监听频率
-                                     refreshControl={
-                                         <RefreshControl
-                                             refreshing={this.state.isRefreshing}
-                                             onRefresh={this._onRefresh}
-                                             tintColor="#ffffff"
-                                             title="Loading..."
-                                             titleColor="#000000"
-                                             colors={['#ff0000', '#00ff00', '#0000ff']}
-                                             progressBackgroundColor="#ffff00"
-                                         />
-                                     }
+                    <SectionList ref={(c)=>this._sectionList = c}
+                                 data={this.state.dataSourceArr}
+                                 ListHeaderComponent = {()=> this._banner()}
+                        // renderSectionHeader={({section}) => (this._sectionHeader())}
+                                 style={styles.tableViewLayout}
+                                 sections={[ // 不同section渲染相同类型的子组件
+                                     {data:this.state.dataSourceArr, renderItem:({item, index}) => this._renderItem(item, index)},
+                                 ]}
+                                 keyExtractor = {(item, index)=>this.keyExtractor(item, index)}
+                                 onScroll={(e)=>{this._onScroll(e)}}
+                                 scrollEventThrottle={1}  //监听频率
+                                 refreshControl={
+                                     <RefreshControl
+                                         refreshing={this.state.isRefreshing}
+                                         onRefresh={this._onRefresh}
+                                         tintColor="#ffffff"
+                                         title="Loading..."
+                                         titleColor="#000000"
+                                         colors={['#ff0000', '#00ff00', '#0000ff']}
+                                         progressBackgroundColor="#ffff00"
+                                     />
+                                 }
 
-                        >
-                        </SectionList>
-                    </View>
+                    >
+                    </SectionList>
+                </View>
 
-                    <LOLGeneralController navigation={this.props.navigation}
-                                          onScroll={(e)=>this._onScroll(e)}>
+                <LOLGeneralController navigation={this.props.navigation}
+                                      onScroll={(e)=>this._onScroll(e)}>
 
-                    </LOLGeneralController>
-                </ScrollView>
+                </LOLGeneralController>
+                <LOLSpeicalColumnController navigation={this.props.navigation}
+                                            onScroll={(e)=>this._onScroll(e)}>
+                </LOLSpeicalColumnController>
+            </ScrollView>
 
-            </Provider>
         );
     }
 }
+
+const BaseViewController = connect(
+    mapToState,
+    mapDispatchProps,
+)(BaseNavigationController)
+
 const showAlert = (string) => {
     Alert.alert(''+stirng);
 };

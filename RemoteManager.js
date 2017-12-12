@@ -55,7 +55,7 @@ export const lolYule = 'http://qt.qq.com/php_cgi/news/php/varcache_getnews.php?i
 export const bilibiliApi = 'https://app.bilibili.com/x/feed/index?access_key=fe8c182f3151970812cb27d53eb264fa&actionKey=appkey&appkey=27eb53fc9058f8c3&build=6050&device=phone&idx=1496939923&login_event=2&mobi_app=iphone&network=wifi&open_event=cold&platform=ios&pull=1&sign=e1db2778b06164605bcc424a0df1d4e2&style=2&ts=1504144289'
 
 export const _keyExtractor = (item, index)=>{
-    return item.title
+    return ''+ index
 }
 
 /**

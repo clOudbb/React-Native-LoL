@@ -44,6 +44,7 @@ import {
     Image,
     Button,
 } from 'react-native';
+import LOLSpeicalColumnDetailController from '../GeneralController/LOLSpeicalColumnDetailController'
 
 
 class SpeicalColumnCell extends React.Component
@@ -57,10 +58,10 @@ class SpeicalColumnCell extends React.Component
     }
 
     _subsriAction(){
-
+        Alert.alert('已订阅')
     }
 
-    //顶部导航栏与bug，隐藏后在出现，滚动条会恢复原始。修复方案 state用redux管理
+    //顶部导航栏与bug，隐藏后在出现，滚动条会恢复原始。修复方案 state用redux管理 (もうフィクス)
     showSubsriButton(){
         return(
             <TouchableHighlight onPress={()=>this._subsriAction()}
@@ -121,6 +122,7 @@ export default class LOLSpeicalColumnController extends React.Component
 
     _touchAction = (item, index)=>{
         const {navigate} = this.props.navigation
+        navigate('ColumnDetail',{item : item})
     }
 
     _listRemote = ()=> {

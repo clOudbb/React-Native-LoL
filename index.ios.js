@@ -18,6 +18,8 @@ import PLSectionHeaderView from './PLSectionHeaderView'
 import CustomizeNaviBar from './CustomizeNaviBar'
 import LOLGeneralController from './GeneralController/LOLGeneralController'
 import LOLSpeicalColumnController from './GeneralController/LOLSpeicalColumnController'
+import LOLSpeicalColumnDetailController from './GeneralController/LOLSpeicalColumnDetailController'
+
 import {
     store,
     reduxScrollValue,
@@ -82,6 +84,7 @@ class RNHighScores extends React.Component {
     componentDidMount() {
 
     }
+
 
     _onScroll(value){
         console.log('scroll call back value ='+value)
@@ -554,6 +557,14 @@ const App = StackNavigator({
             headerStyle : styles.navigationBarStyle,
         },
     },
+    ColumnDetail: {
+        screen: LOLSpeicalColumnDetailController,
+        navigationOptions: {
+            title: 'detail',
+            header:null,
+            headerStyle : styles.navigationBarStyle,
+        }
+    },
     Web: {
         screen : WebViewController,
         navigationOptions : {
@@ -561,6 +572,7 @@ const App = StackNavigator({
             headerStyle : styles.navigationBarStyle,
         },
     },
+
 }, StackNavigatorConfig);
 
 

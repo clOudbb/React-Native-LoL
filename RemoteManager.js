@@ -36,8 +36,17 @@ export const loljiqiansai = 'http://qt.qq.com/php_cgi/news/php/varcache_getnews.
 export const lolFreeHeroWeek = 'http://qt.qq.com/php_cgi/lol_mobile/hero_group/php/cards.php?uuid=f0ad26da-b715-426e-a467-f85fa4c767bc&area_id=1&plat=ios&version=9755'
 //英雄
 export const lolHeroChannel = 'http://qt.qq.com/php_cgi/lol_mobile/hero_group/php/cards.php?uuid=f0ad26da-b715-426e-a467-f85fa4c767bc&area_id=1&plat=ios&version=9755'
+
+
 //专栏
 export const lolDingyueApi = 'http://qt.qq.com/lua/lol_news/columnlist?page=0&plat=ios&version=9680';
+//专栏内页
+export const lolDingYuePageApi = 'http://qt.qq.com/php_cgi/news/php/varcache_getcols.php?cid=126&page=0&plat=ios&version=9755'
+// export const lolDingyuePageApi = 'http://qt.qq.com/php_cgi/lol_mobile/club/v arcache_team_entrancev2.php?version=271394&plat=ios';
+//专栏内页-头部
+export const loldingYuePageHeadApi = 'http://qt.qq.com/lua/lol_news/getcolumn?cid=126&plat=ios&version=9755';
+
+
 //视频-全部视频
 export const lolAllVideo = 'http://apps.game.qq.com/lol/act/website2013/video.php?page=1&pagesize=10&r1=1&source=lolapp'
 //视频-热门英雄

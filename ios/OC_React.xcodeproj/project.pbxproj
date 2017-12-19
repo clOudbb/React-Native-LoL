@@ -5,7 +5,6 @@
 	};
 	objectVersion = 46;
 	objects = {
-
 /* Begin PBXBuildFile section */
 		1835CD18573A81D00FBF60B5 /* libPods-OC_ReactTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = FD3FED3DC27DE3D525C8C25B /* libPods-OC_ReactTests.a */; };
 		48ADEC6D6BB1F4CDD92694B9 /* libPods-OC_React.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E4B3285C2C8217D5F69FF11B /* libPods-OC_React.a */; };
@@ -18,6 +17,8 @@
 		C62DF6E21F6BE29600E9E077 /* OC_ReactUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = C62DF6E11F6BE29600E9E077 /* OC_ReactUITests.m */; };
 		C62DF6F11F6BE29F00E9E077 /* RootViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C62DF6F01F6BE29F00E9E077 /* RootViewController.m */; };
 		C62DF6F41F6BE4CE00E9E077 /* ReactViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C62DF6F31F6BE4CE00E9E077 /* ReactViewController.m */; };
+		EFE1F37CB5694CF2A017C902 /* libRNSpinkit.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 744064610AAE4B74A67E6D5D /* libRNSpinkit.a */; };
+		7DFFF6F9A03C4CC09E613E4B /* libBVLinearGradient.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 6A6143EE3DF3479A98D7E1F4 /* libBVLinearGradient.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -64,6 +65,10 @@
 		E4B3285C2C8217D5F69FF11B /* libPods-OC_React.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-OC_React.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		E62AEB35061366A15FF67760 /* Pods-OC_ReactTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-OC_ReactTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-OC_ReactTests/Pods-OC_ReactTests.release.xcconfig"; sourceTree = "<group>"; };
 		FD3FED3DC27DE3D525C8C25B /* libPods-OC_ReactTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-OC_ReactTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		4F32A55AD3F34755985C3B32 /* RNSpinkit.xcodeproj */ = {isa = PBXFileReference; name = "RNSpinkit.xcodeproj"; path = "../node_modules/react-native-spinkit/ios/RNSpinkit.xcodeproj"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = wrapper.pb-project; explicitFileType = undefined; includeInIndex = 0; };
+		744064610AAE4B74A67E6D5D /* libRNSpinkit.a */ = {isa = PBXFileReference; name = "libRNSpinkit.a"; path = "libRNSpinkit.a"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = archive.ar; explicitFileType = undefined; includeInIndex = 0; };
+		D9714CFCF75C4491B4121FD8 /* BVLinearGradient.xcodeproj */ = {isa = PBXFileReference; name = "BVLinearGradient.xcodeproj"; path = "../node_modules/react-native-linear-gradient/BVLinearGradient.xcodeproj"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = wrapper.pb-project; explicitFileType = undefined; includeInIndex = 0; };
+		6A6143EE3DF3479A98D7E1F4 /* libBVLinearGradient.a */ = {isa = PBXFileReference; name = "libBVLinearGradient.a"; path = "libBVLinearGradient.a"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = archive.ar; explicitFileType = undefined; includeInIndex = 0; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -72,6 +77,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				48ADEC6D6BB1F4CDD92694B9 /* libPods-OC_React.a in Frameworks */,
+				EFE1F37CB5694CF2A017C902 /* libRNSpinkit.a in Frameworks */,
+				7DFFF6F9A03C4CC09E613E4B /* libBVLinearGradient.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -126,6 +133,7 @@
 				C62DF6C01F6BE29500E9E077 /* Products */,
 				76A2D5D330E31AFE3520C579 /* Pods */,
 				B8475166D44696F39B767B37 /* Frameworks */,
+				25DB23288DE544909A2BFEB6 /* Libraries */,
 			);
 			sourceTree = "<group>";
 		};
@@ -181,6 +189,16 @@
 			);
 			path = OC_ReactUITests;
 			sourceTree = "<group>";
+		};
+		25DB23288DE544909A2BFEB6 /* Libraries */ = {
+			isa = "PBXGroup";
+			children = (
+				4F32A55AD3F34755985C3B32 /* RNSpinkit.xcodeproj */,
+				D9714CFCF75C4491B4121FD8 /* BVLinearGradient.xcodeproj */,
+			);
+			name = Libraries;
+			sourceTree = "<group>";
+			path = "";
 		};
 /* End PBXGroup section */
 
@@ -253,7 +271,7 @@
 		C62DF6B71F6BE29500E9E077 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0830;
+				LastUpgradeCheck = 830;
 				ORGANIZATIONNAME = "张征鸿";
 				TargetAttributes = {
 					C62DF6BE1F6BE29500E9E077 = {
@@ -614,6 +632,11 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				USER_HEADER_SEARCH_PATHS = "";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+				);
 			};
 			name = Debug;
 		};
@@ -632,6 +655,11 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				USER_HEADER_SEARCH_PATHS = "";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+				);
 			};
 			name = Release;
 		};
@@ -645,6 +673,11 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "com.paladin.OC-ReactTests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/OC_React.app/OC_React";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+				);
 			};
 			name = Debug;
 		};
@@ -658,6 +691,11 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "com.paladin.OC-ReactTests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/OC_React.app/OC_React";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+				);
 			};
 			name = Release;
 		};
@@ -670,6 +708,11 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "com.paladin.OC-ReactUITests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TEST_TARGET_NAME = OC_React;
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+				);
 			};
 			name = Debug;
 		};
@@ -682,6 +725,11 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "com.paladin.OC-ReactUITests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TEST_TARGET_NAME = OC_React;
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+				);
 			};
 			name = Release;
 		};

@@ -29,6 +29,7 @@ import {
     RefreshControl,
     Image,
     Button,
+    PanResponder,
 } from 'react-native';
 import ParallaxScrollView from 'react-native-parallax-scroll-view';
 
@@ -147,6 +148,19 @@ export default class LOLSpeicalColumnDetailController extends React.Component
             isRefreshing:false,
             item:this.props.navigation.state.params.item,
         }
+
+
+        this._panResponder = PanResponder.create({
+            // 要求成为响应者：
+            onStartShouldSetPanResponder: (e, g) => this._startShouldSetPanResponder(e, g),
+            onStartShouldSetPanResponderCapture: (evt, gestureState) => this._startShouldSetPanResponderCapture(evt, gestureState),
+            onMoveShouldSetPanResponderCapture: (evt, gestureState) => this._moveShouldSetPanResponderCapture(evt, gestureState),
+            onPanResponderGrant: () => {
+
+            },
+            onMoveShouldSetResponder:(e, g)=> this._onMoveShouldSetResponder(e, g),
+            onPanResponderMove: (evt, gestureState)=>this._panMoveGesture(evt, gestureState),
+        });
     }
 
     componentDidMount(){
@@ -195,7 +209,6 @@ export default class LOLSpeicalColumnDetailController extends React.Component
 
     _sectionListScroll(e){
         var contentOffsetY = e.nativeEvent.contentOffset.y
-
     }
 
     _scrollViewOnScroll(e){
@@ -216,6 +229,7 @@ export default class LOLSpeicalColumnDetailController extends React.Component
                 })
             }
         }
+
     }
 
     /**
@@ -243,18 +257,55 @@ export default class LOLSpeicalColumnDetailController extends React.Component
     }
 
 
+    _panMoveGesture(evt, gestureState){
+
+        let offsetY = gestureState.dy
+        let pageY = evt.nativeEvent.pageY
+        let touchOffsetY = tempOffsetY - pageY
+        console.log('touchOffset = '+ touchOffsetY)
+        console.log('offsetY = ' + offsetY)
+        if (offsetY <= 0 && offsetY >= -100 ) {
+
+        }
+        // tempOffsetY = offsetY
+    }
+
+    _startShouldSetPanResponder(evt, gestureState) {
+        return true
+    }
+
+    _startShouldSetPanResponderCapture(evt, gestureState) {
+        return false
+    }
+
+    _moveShouldSetPanResponderCapture(evt, gestureState) {
+        return false
+    }
+
+    _onMoveShouldSetResponder(evt, gestureState) {
+        return true
+    }
+
+
+
     render(){
         return(
-            <View>
+            <View {...this._panResponder.panHandlers}
+                  ref={(containView)=>this.containView= containView}
+            >
                 <ScrollView style = {{
                     backgroundColor:'#2E8B57',
                 }}
                             showsHorizontalScrollIndicator={false}
                             ref={list=>this._scrollView=list}
                             onScroll={(e)=>this._scrollViewOnScroll(e)}
-                            bounces={true}
-                            scrollEventThrottle={1}>
-                    {this.headerViewComponent()}
+                            bounces={false}
+                            scrollEnabled={true}
+                            scrollEventThrottle={1}
+                >
+                    {
+                        this.headerViewComponent()
+                    }
                     <SectionList ref={(c)=>this._sectionList = c}
                                  data={this.state.dataSourceArr}
                                  style={styles.tableViewLayout}
@@ -265,6 +316,7 @@ export default class LOLSpeicalColumnDetailController extends React.Component
                                  keyExtractor={(item)=>item.title}
                                  onScroll={(e)=>{this._sectionListScroll(e)}}
                                  scrollEventThrottle={1}  //监听频率
+                                 scrollEnabled={true}
                                  refreshControl={
                                      <RefreshControl
                                          refreshing={this.state.isRefreshing}
@@ -277,8 +329,8 @@ export default class LOLSpeicalColumnDetailController extends React.Component
                                      />
                                  }>
                     </SectionList>
-
                 </ScrollView>
+
                 <View style={{
                     width:kScreenWidth,
                     height:naviBarHeight,
@@ -293,7 +345,7 @@ export default class LOLSpeicalColumnDetailController extends React.Component
                     </View>
                     <View style={{
                         width:60,
-                        eight:30,
+                        height:30,
                         position:'absolute',
                         top:30,
                         left:10,
@@ -310,6 +362,7 @@ export default class LOLSpeicalColumnDetailController extends React.Component
     }
 }
 
+let tempOffsetY = 0
 
 
 const styles = StyleSheet.create({

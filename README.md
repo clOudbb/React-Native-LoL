@@ -2,15 +2,15 @@
 League Of Legends In Hand
 
 # Features
-> react
-> redux
-> react-redux
-> react-native-swiper
-> react-navigation
+* react
+* redux
+* react-redux
+* react-native-swiper
+* react-navigation
 
 # Project
-> add tabBar
-> optimization setState method (shouldUpdateComponent)
+* add tabBar
+* optimization setState method (shouldUpdateComponent)
 
 ## How to view
 ```shell

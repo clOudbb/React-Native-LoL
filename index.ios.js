@@ -136,7 +136,8 @@ class RNHighScores extends React.Component {
                 <Provider store={store}>
                     <View>
                     <BaseViewController navigation={this.props.navigation}
-                          onScrollCall={(value)=>this._onScroll(value)}>
+                          onScrollCall={(value)=>this._onScroll(value)}
+                                        naviHidden={this.state.naviBarHidden}>
                     </BaseViewController>
                     {
                         this.state.naviBarHidden?null:<CustomizeNaviBar ref={(nv) => this._naviBar = nv}/>
@@ -164,6 +165,13 @@ export default class BaseNavigationController extends React.Component {
 
         //通知
         RCTDeviceEventEmitter.emit('emit', 'message')
+    }
+
+    shouldComponentUpdate(nextProps, nextState) {
+        let next = nextProps.naviHidden
+        let props = this.props.naviHidden
+        if (next !== props) return false
+        else return true
     }
 
     componentDidMount(){

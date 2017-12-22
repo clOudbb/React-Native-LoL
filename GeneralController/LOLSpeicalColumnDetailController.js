@@ -23,6 +23,7 @@ import {
     View,
     Dimensions,
     SectionList,
+    FlatList,
     TouchableHighlight,
     ScrollView,
     Animated,
@@ -138,6 +139,21 @@ class ColumnListCell extends React.Component
 }
 
 
+/**
+ * 暂存外层scroll的contentOffsetY的值
+ */
+var tempScrollOffsetY = 0
+/**
+ * 存储手势释放时的外层Scroll 的contentOffset
+ */
+var tempOffsetY = 0
+/**
+ *　记录listview 的offsetY
+ * @type {number}
+ */
+var tempSectionListOffsetY = 0
+let headViewHeight = 200
+let boundsY = headViewHeight - naviBarHeight
 //特別の番組　とくべつのばんぐみ
 export default class LOLSpeicalColumnDetailController extends React.Component
 {
@@ -158,13 +174,21 @@ export default class LOLSpeicalColumnDetailController extends React.Component
             onPanResponderGrant: () => {
 
             },
+            onPanResponderRelease: (e, g)=> this._onPanResponderRelease(e, g),
             onMoveShouldSetResponder:(e, g)=> this._onMoveShouldSetResponder(e, g),
             onPanResponderMove: (evt, gestureState)=>this._panMoveGesture(evt, gestureState),
         });
+
+    }
+
+    shouldComponentUpdate(nextProps, nextState) {
+        return true
     }
 
     componentDidMount(){
         this._listRemote()
+        tempScrollOffsetY = 0
+        tempOffsetY = 0
     }
 
     _touchAction = (item, index)=>{
@@ -173,6 +197,10 @@ export default class LOLSpeicalColumnDetailController extends React.Component
     }
 
     _listRemote = ()=> {
+        if (this.state.isRefreshing) return
+        this.setState({
+            isRefreshing:true,
+        })
         let propsItem = this.state.item
         //http://qt.qq.com/php_cgi/news/php/varcache_getcols.php?cid=126&page=0&plat=ios&version=9755
         let api = 'http://qt.qq.com/php_cgi/news/php/varcache_getcols.php?cid='+propsItem.col_id+'&page=0&plat=ios&version=9755'
@@ -183,8 +211,6 @@ export default class LOLSpeicalColumnDetailController extends React.Component
                     list = responseJson.list
                     this.setState({
                         dataSourceArr:list,
-                    })
-                    this.setState({
                         isRefreshing: false,
                     })
                 }).catch((error)=>{
@@ -209,10 +235,12 @@ export default class LOLSpeicalColumnDetailController extends React.Component
 
     _sectionListScroll(e){
         var contentOffsetY = e.nativeEvent.contentOffset.y
+        tempSectionListOffsetY = contentOffsetY
     }
 
     _scrollViewOnScroll(e){
         var contentOffsetY = e.nativeEvent.contentOffset.y
+        tempScrollOffsetY = contentOffsetY
         if (contentOffsetY >= 0 && contentOffsetY <= (200 - naviBarHeight)) {
             let opac = contentOffsetY / (200 - naviBarHeight)
             this.cusNavi.setNativeProps({
@@ -237,6 +265,10 @@ export default class LOLSpeicalColumnDetailController extends React.Component
      * 原版是头部滑动到一定位置后，列表会获得焦点进行滑动
      * 应该是ScrollView的嵌套，但是RN中不知道怎么实现无缝衔接，因为一旦设置state，势必刷新render
      * 导致页面会停顿一下，会打断手势焦点的获取
+     *
+     * 问题攻克
+     * 最终选择了使用手势来监听屏幕滑动，达到不同区域滑动分离的效果
+     * 整体效果最终优化还不错，目前看细微上可能还有些不同，但是整体效果还可以
      */
 
     headerViewComponent(){
@@ -245,7 +277,7 @@ export default class LOLSpeicalColumnDetailController extends React.Component
             <ColumnHeaderView style={{
                 backgroundColor:'#2E8B57',
                 opacity:1,
-                height:200,
+                height:headViewHeight,
                 marginTop:0,
             }} item={propsItem} ref={(headerView)=>this.headerView=headerView} navigation={this.props.navigation}/>
         )
@@ -261,24 +293,105 @@ export default class LOLSpeicalColumnDetailController extends React.Component
 
         let offsetY = gestureState.dy
         let pageY = evt.nativeEvent.pageY
-        let touchOffsetY = tempOffsetY - pageY
-        console.log('touchOffset = '+ touchOffsetY)
+        let moveY = gestureState.moveY
         console.log('offsetY = ' + offsetY)
-        if (offsetY <= 0 && offsetY >= -100 ) {
+        console.log('moveY = ' + moveY)
+        console.log('pageY = ' + pageY)
+        console.log('tempScrollOffsetY = ' + tempScrollOffsetY)
+        if (offsetY <= 0 && offsetY >= -boundsY) {
+            //上滑
+            if (offsetY === 0) return
+            if (tempScrollOffsetY >= 0 && tempScrollOffsetY <= boundsY) {
+                this._scrollView.scrollTo({
+                    x:0,
+                    y:-offsetY + tempOffsetY,
+                    animated:false,
+                })
+            }
 
+            // this.containView.setNativeProps({
+            //     style:{
+            //         top:offsetY,
+            //     }
+            // })
+        } else {
+            //下拉
+            if (tempScrollOffsetY >= 0) {
+                if (tempScrollOffsetY > 0) {
+                    this._scrollView.scrollTo({
+                        x:0,
+                        y:-offsetY + tempOffsetY,
+                        animated:false,
+                    })
+                    return
+                }
+                //外层scroll 固定时
+                this._sectionList.scrollToOffset({
+                    animated:false,
+                    offset:- offsetY,
+                })
+            } else {
+                if (tempScrollOffsetY < 0) {
+                    this._scrollView.scrollTo({
+                        x:0,
+                        y:0,
+                        animated:false,
+                    })
+                    tempScrollOffsetY = 0
+                    return
+                }
+                this._sectionList.scrollToOffset({
+                    animated:false,
+                    offset: 0,
+                })
+            }
         }
-        // tempOffsetY = offsetY
     }
+
+    /**
+     * 手势释放事件
+     */
+    _onPanResponderRelease(evt, gestureState){
+        let offsetY = gestureState.dy
+        if (tempScrollOffsetY >= 0 && offsetY > 0) {
+            this._sectionList.scrollToOffset({
+                animated:true,
+                offset: 0,
+            })
+        }
+        if (tempSectionListOffsetY >= 200) {
+            this._listRemote()
+        }
+        tempOffsetY = tempScrollOffsetY
+    }
+
+    /**
+     * 是否成为响应者
+     * @param evt
+     */
 
     _startShouldSetPanResponder(evt, gestureState) {
         return true
     }
 
+    /**
+     * 该手势持有者如果不是第一响应者，可以使用返回true拦截住
+     */
     _startShouldSetPanResponderCapture(evt, gestureState) {
+        let offsetY = gestureState.dy
+        console.log('start set pan capture')
+        if (offsetY <= 0 && offsetY >= -boundsY ) {
+            return true
+        }
         return false
     }
 
     _moveShouldSetPanResponderCapture(evt, gestureState) {
+        let offsetY = gestureState.dy
+        console.log('move set pan capture = ' + offsetY)
+        if (offsetY <= 0 && offsetY >= -boundsY ) {
+            return true
+        }
         return false
     }
 
@@ -287,49 +400,56 @@ export default class LOLSpeicalColumnDetailController extends React.Component
     }
 
 
-
     render(){
         return(
-            <View {...this._panResponder.panHandlers}
-                  ref={(containView)=>this.containView= containView}
-            >
-                <ScrollView style = {{
-                    backgroundColor:'#2E8B57',
-                }}
-                            showsHorizontalScrollIndicator={false}
-                            ref={list=>this._scrollView=list}
-                            onScroll={(e)=>this._scrollViewOnScroll(e)}
-                            bounces={false}
-                            scrollEnabled={true}
-                            scrollEventThrottle={1}
+            <View>
+                <View
+                    ref={(containView)=>this.containView= containView}
+                    style={{
+                        top:0,
+                    }}
+                    {...this._panResponder.panHandlers}
                 >
-                    {
-                        this.headerViewComponent()
-                    }
-                    <SectionList ref={(c)=>this._sectionList = c}
-                                 data={this.state.dataSourceArr}
-                                 style={styles.tableViewLayout}
-                        // ListHeaderComponent={()=>this.headerViewComponent()}
-                                 sections={[ // 不同section渲染相同类型的子组件
-                                     {data:this.state.dataSourceArr, renderItem:({item, index})=> this._firstSection(item, index)},
-                                 ]}
-                                 keyExtractor={(item)=>item.title}
-                                 onScroll={(e)=>{this._sectionListScroll(e)}}
-                                 scrollEventThrottle={1}  //监听频率
-                                 scrollEnabled={true}
-                                 refreshControl={
-                                     <RefreshControl
-                                         refreshing={this.state.isRefreshing}
-                                         onRefresh={this._onRefresh}
-                                         tintColor="#cccccc"
-                                         title="Loading..."
-                                         titleColor="#000000"
-                                         colors={['#ff0000', '#00ff00', '#0000ff']}
-                                         progressBackgroundColor="#ffff00"
-                                     />
-                                 }>
-                    </SectionList>
-                </ScrollView>
+                    <ScrollView style = {{
+                        backgroundColor:'#2E8B57',
+                    }}
+                                showsHorizontalScrollIndicator={false}
+                                ref={list=>this._scrollView=list}
+                                onScroll={(e)=>this._scrollViewOnScroll(e)}
+                                bounces={false}
+                                scrollEnabled={false}
+                                scrollEventThrottle={1}
+                    >
+                        {
+                            this.headerViewComponent()
+                        }
+                        <FlatList ref={(c)=>this._sectionList = c}
+                                  data={this.state.dataSourceArr}
+                                  style={styles.tableViewLayout}
+                            // ListHeaderComponent={()=>this.headerViewComponent()}
+                            //          sections={[ // 不同section渲染相同类型的子组件
+                            //              {data:this.state.dataSourceArr, renderItem:({item, index})=> this._firstSection(item, index)},
+                            //          ]}
+                                  renderItem={({item, index})=>this._firstSection(item, index)}
+                                  keyExtractor={(item)=>item.title}
+                                  onScroll={(e)=>{this._sectionListScroll(e)}}
+                                  scrollEventThrottle={1}  //监听频率
+                                  scrollEnabled={true}
+                                  refreshControl={
+                                      <RefreshControl
+                                          refreshing={this.state.isRefreshing}
+                                          onRefresh={this._onRefresh}
+                                          tintColor="#cccccc"
+                                          title="Loading..."
+                                          titleColor="#000000"
+                                          colors={['#ff0000', '#00ff00', '#0000ff']}
+                                          progressBackgroundColor="#ffff00"
+                                      />
+                                  }>
+                        </FlatList>
+                    </ScrollView>
+
+                </View>
 
                 <View style={{
                     width:kScreenWidth,
@@ -357,12 +477,12 @@ export default class LOLSpeicalColumnDetailController extends React.Component
                         />
                     </View>
                 </View>
+
             </View>
         )
     }
 }
 
-let tempOffsetY = 0
 
 
 const styles = StyleSheet.create({

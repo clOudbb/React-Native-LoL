@@ -42,6 +42,7 @@ import {
     Animated,
     RefreshControl,
     Image,
+    Alert,
     Button,
 } from 'react-native';
 import LOLSpeicalColumnDetailController from '../GeneralController/LOLSpeicalColumnDetailController'

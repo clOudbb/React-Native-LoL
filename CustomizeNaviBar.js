@@ -8,7 +8,8 @@ import {
     Text,
     View,
     Dimensions,
-    TouchableHighlight
+    Image,
+    TouchableHighlight,
 } from 'react-native';
 import {
     mapDispatchProps,
@@ -46,11 +47,17 @@ export default class CustomizeNavibar extends React.Component
         )
     }
 
+
     render(){
         return(
             <View style={styles.customizeNavibarStye} ref={(vi)=>this._vi=vi}>
                 <View style={styles.containViewStyle}>
-                    <View style={{width:30, height:30}}>
+                    <View style={{left: 10}}>
+                        <Image style={{
+                            width:40,
+                            height:40,
+                            borderRadius: 20,
+                        }} source={require('./Image/1.jpg')}/>
                     </View>
                     {this._sectionHeader()}
                 </View>
@@ -116,7 +123,7 @@ const styles = StyleSheet.create({
     },
 
     bannerStyle:{
-        position:'absolute',
+        // position:'absolute',
         top:20,
         width:375,
         height:40,

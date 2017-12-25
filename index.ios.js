@@ -177,7 +177,11 @@ export default class BaseNavigationController extends React.Component {
     componentDidMount(){
         this._datahandle()
         this.notifi = RCTDeviceEventEmitter.addListener(kTouchBannerNotification, (index)=>{
-            this._scrollView.scrollTo(0, index* kScreenWidth)
+            this._scrollView.scrollTo({
+                x : 0,
+                y : index * kScreenWidth,
+                animated:false,
+            })
         })
     }
 

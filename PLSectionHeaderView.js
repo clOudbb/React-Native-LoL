@@ -205,7 +205,7 @@ var styles = StyleSheet.create({
         backgroundColor:'white',
         marginTop:0,
         marginRight:0,
-        marginLeft:0,
+        marginLeft:10,
         marginBottom:0,
     },
 

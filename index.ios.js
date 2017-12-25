@@ -53,6 +53,7 @@ import {
     ScrollView,
 } from 'react-native';
 import {GeneralControllerCell} from "./GeneralController/Views/GeneralControllerCell";
+import TabNavigator from "react-native-tab-navigator";
 
 /*
  <NavigatorIOS
@@ -69,6 +70,11 @@ import {GeneralControllerCell} from "./GeneralController/Views/GeneralController
 const kScreenWidth = Dimensions.get('window').width
 const kScreenHeight = Dimensions.get('window').height
 
+const tabBarItemName = {
+    home : 'home',
+    mine : 'mine'
+}
+
 class RNHighScores extends React.Component {
 
     constructor(props) {
@@ -78,6 +84,7 @@ class RNHighScores extends React.Component {
         console.log('screenH' + kScreenHeight)
         this.state = {
             naviBarHidden:false,
+            selectedTab : tabBarItemName.home
         }
     }
 
@@ -115,37 +122,72 @@ class RNHighScores extends React.Component {
 
     }
 
-    render(){
-        return(
-
+    firstTabBarItem(){
+        return (
             <View style={styles.divLayout}>
-                {/*<NavigatorIOS*/}
-                {/*initialRoute={{*/}
-                {/*component: BaseNavigationController,*/}
-                {/*title: 'React Native',*/}
-                {/*passProps: { myProp: 'foo' },*/}
-                {/*}}*/}
-                {/*style={{flex: 1}}*/}
-                {/*translucent={false}*/}
-                {/*/>*/}
-
-                {/*<BaseNavigationController navigation={this.props.navigation}*/}
-                {/*onScrollCall={(value)=>this._onScroll(value)}*/}
-                {/*>*/}
-                {/*</BaseNavigationController>*/}
                 <Provider store={store}>
                     <View>
-                    <BaseViewController navigation={this.props.navigation}
-                          onScrollCall={(value)=>this._onScroll(value)}
-                                        naviHidden={this.state.naviBarHidden}>
-                    </BaseViewController>
-                    {
-                        this.state.naviBarHidden?null:<CustomizeNaviBar ref={(nv) => this._naviBar = nv}/>
-                    }
+                        <BaseViewController navigation={this.props.navigation}
+                                            onScrollCall={(value)=>this._onScroll(value)}
+                                            naviHidden={this.state.naviBarHidden}>
+                        </BaseViewController>
+                        {
+                            this.state.naviBarHidden?null:<CustomizeNaviBar ref={(nv) => this._naviBar = nv}/>
+                        }
                     </View>
                 </Provider>
+            </View>
+        )
+    }
+
+    secondTabBarItem(){
+        return (
+            <View style={styles.divLayout}>
 
             </View>
+        )
+    }
+
+    render(){
+        return(
+            <TabNavigator   tabBarStyle={{
+                height: tabBarHeight,
+                // overflow: 'hidden'
+            }}
+                            sceneStyle={{
+                                paddingBottom: 100
+                            }}>
+                <TabNavigator.Item
+                    selected={this.state.selectedTab === tabBarItemName.home}
+                    title=" "
+                    renderIcon={() => <Image source={require('./Image/tabBarIcon/tab_home_n.png')} />}
+                    renderSelectedIcon={() => <Image source={require('./Image/tabBarIcon/tab_home_h.png')} />}
+                    badgeText=""
+                    onPress={() => this.setState({ selectedTab: tabBarItemName.home })}
+                    tabStyle={{
+                        justifyContent:'center',
+                    }}
+                >
+                    {
+                        this.firstTabBarItem()
+                    }
+                </TabNavigator.Item>
+                <TabNavigator.Item
+                    selected={this.state.selectedTab === tabBarItemName.mine}
+                    title=' '
+                    renderIcon={() => <Image source={require('./Image/tabBarIcon/tabbar_me_n.png')} />}
+                    renderSelectedIcon={() => <Image source={require('./Image/tabBarIcon/tabbar_me_h.png')} />}
+                    badgeText=""
+                    onPress={() => this.setState({ selectedTab: tabBarItemName.mine })}
+                    tabStyle={{
+                        justifyContent:'center',
+                    }}
+                >
+                    {
+                        this.secondTabBarItem()
+                    }
+                </TabNavigator.Item>
+            </TabNavigator>
         );
     }
 }

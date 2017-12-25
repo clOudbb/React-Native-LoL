@@ -61,6 +61,19 @@ export class WebViewController extends React.Component
         // })
     }
 
+    /**
+     * 很多H5和原生页面交互很多都是用过这中<a>标签私有协议进行。这种标签的链接的格式一般都不是标准的http和https协议
+     * 也就是说webView可能会接收到不标准的url，导致会第一时间无法加载成功页面显示错误
+     * 在这里进行一次
+     */
+    onShouldStartLoadWithRequest= (e) => {
+        var scheme = e.url.split('://')[0]
+        if(scheme === 'http' || scheme === 'https'){
+            return true
+        }
+        return false
+    }
+
     render()
     {
         return(
@@ -70,6 +83,7 @@ export class WebViewController extends React.Component
                     backgroundColor:'white',
                 }}
                 source={{uri : this.state.url}}
+                onShouldStartLoadWithRequest = {(e)=>this.onShouldStartLoadWithRequest(e)}
             >
 
             </WebView>

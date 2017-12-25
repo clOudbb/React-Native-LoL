@@ -86,6 +86,13 @@ class RNHighScores extends React.Component {
             naviBarHidden:false,
             selectedTab : tabBarItemName.home
         }
+
+        /**
+         * 这里由于RN如果使用了桥接原声内容，目前0.50版本会警告RCTBatchedBridge未来版本会被废弃并移除掉
+         * 暂时不去处理毕竟是练手项目，使用console屏蔽掉该警告
+         * 未来使用查资料好像是会使用react-cxx-bridge框架
+         */
+        console.ignoredYellowBox = ["RCTBatchedBridge is deprecated and will be removed in a future React Native release."];
     }
 
     componentDidMount() {

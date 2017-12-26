@@ -19,13 +19,15 @@ import {
 import BaseNavigationController from '../index.ios'
 
 export const _scrollViewState = '_scrollViewState'  //底部视图滚动事件
+export const _reduxSubscribeType = '_reduxSubscribeType'  //模拟订阅
 
 // export const rootReducer = combineReducers({
 //     _scrollViewState : scrollReducerHandle,
 // })
 const _animLineLeft = 15
 const initParams = {
-    _linePositionX : _animLineLeft
+    _linePositionX : _animLineLeft,
+    _subscribeArray : []
 }
 export const store = createStore(scrollReducerHandle, initParams)
 
@@ -34,11 +36,15 @@ function scrollReducerHandle(state, action) {
         case _scrollViewState:
             let s = reduxScrollValueReducer(action.index)
             return s
+        case _reduxSubscribeType:
+            return reduxSubscribeState(action.section, action.index, action.isSub)
         default:
             return initParams
     }
 }
 
+
+/** call back state */
 export const reduxScrollValueReducer = (index)=> {
     let v = index * Dimensions.get('window').width / 4 + _animLineLeft
     // let lineArr = [true, false, false,  false,  false]
@@ -54,16 +60,64 @@ export const reduxScrollValueReducer = (index)=> {
     }
 }
 
+export const reduxSubscribeState = (section, index, isSub) => {
+    let subArr = initParams._subscribeArray
+    if (isSub === false) {
+        let isHave = false
+        for (let i = 0;i < subArr.length; i++) {
+            let model = subArr[i]
+            if (section === model.section && index === model.index) {
+                isHave = true
+                model.isSub = true
+            }
+        }
+        if (!isHave) {
+            let model = new Object()
+            model.section = section
+            model.index = index
+            model.isSub = true
+            subArr.push(model)
+        }
+    } else {
+        for (let i = 0;i < subArr.length; i++) {
+            let model = subArr[i]
+            if (section === model.section && index === model.index) {
+                model.isSub = false
+            }
+        }
+    }
+    return {
+        _subscribeArray: subArr
+    }
+}
+
+/**   dispatch  */
 /**
+ * 视图页滚动事件
  * @param type => action name *require
  * @param index
  */
+export const reduxUpdateControl = {
+    update: false
+}
 export const reduxScrollValue = (type, index) =>
 {
     return (
         {
             type : type,
             index,
+        }
+    )
+}
+
+export const reduxSubscribe = (type, section, index, isSub) =>
+{
+    return (
+        {
+            type : type,
+            index,
+            section,
+            isSub,
         }
     )
 }
@@ -76,10 +130,20 @@ export const reduxScrollValue = (type, index) =>
  * react全家桶还有一些控件暂时没有用到
  */
 
+
+/**   map  */
+
 export const mapToState = (state)=>{
     return {
-        store:store,
+        store: store,
         state,
+    }
+}
+
+export const mapToSubScribe = (state)=>{
+    return {
+        store: store,
+        subscribeArray:state._subscribeArray
     }
 }
 
@@ -87,6 +151,10 @@ export const mapDispatchProps = (dispatch)=>{
     return {
         _scrollValue : (type, index)=>{
             dispatch(reduxScrollValue(type, index))
+        },
+
+        _subscribe : (type, section, index, isSubscribe) => {
+            dispatch(reduxSubscribe(type, section, index, isSubscribe))
         }
     }
 }

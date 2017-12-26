@@ -25,7 +25,8 @@ import {
     reduxScrollValue,
     _scrollViewState,
     mapDispatchProps,
-    mapToState
+    mapToState,
+    reduxUpdateControl,
 } from './DataManager/ReduxManager'
 import {
     connect,
@@ -199,6 +200,10 @@ class RNHighScores extends React.Component {
     }
 }
 
+/**
+ * 用于识别是否redux改变的state状态
+ * 用来判断一些主页面不需要重新渲染render
+ */
 export default class BaseNavigationController extends React.Component {
 
     constructor(props){
@@ -220,7 +225,11 @@ export default class BaseNavigationController extends React.Component {
         let next = nextProps.naviHidden
         let props = this.props.naviHidden
         if (next !== props) return false
-        else return true
+        if (reduxUpdateControl.update) {
+            reduxUpdateControl.update = false
+            return false
+        }
+        return true
     }
 
     componentDidMount(){
@@ -360,6 +369,7 @@ export default class BaseNavigationController extends React.Component {
         RCTDeviceEventEmitter.emit(kContainScrollViewScroll, index)
 
         this.props._scrollValue(_scrollViewState,index)
+        reduxUpdateControl.update = true
     }
 
     render()

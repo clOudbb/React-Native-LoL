@@ -45,9 +45,19 @@ import {
     Alert,
     Button,
 } from 'react-native';
-import LOLSpeicalColumnDetailController from '../GeneralController/LOLSpeicalColumnDetailController'
+import {
+    store,
+    reduxScrollValue,
+    _reduxSubscribeType,
+    mapDispatchProps,
+    mapToSubScribe,
+    reduxUpdateControl,
+} from '../DataManager/ReduxManager'
+import {
+    connect,
+} from 'react-redux'
 
-
+let isButtonSub = false
 class SpeicalColumnCell extends React.Component
 {
     constructor(props){
@@ -58,18 +68,45 @@ class SpeicalColumnCell extends React.Component
 
     }
 
-    _subsriAction(){
-        Alert.alert('已订阅')
+    componentWillUnmount() {
+
+    }
+
+    shouldComponentUpdate(nextProps, nextState) {
+        if (!nextProps.subscribeArray) return false
+        return true
+    }
+
+    _getIsSubState(){
+        const { store } = this.props;
+        const state = store.getState();
+        if (!state._subscribeArray) return false;
+        let subscribeArray = state._subscribeArray
+        let isSub = false
+        for (let i = 0;i < subscribeArray.length;i++) {
+            let model = subscribeArray[i]
+            if (model.index === this.props.index && model.section === this.props.section) {
+                isSub = model.isSub
+            }
+        }
+        return isSub
+    }
+
+    _subsriAction() {
+        let isSub = this._getIsSubState()
+        isSub?Alert.alert('已取消订阅'):Alert.alert('已订阅')
+        this.props._subscribe(_reduxSubscribeType, this.props.section, this.props.index, isSub)
     }
 
     //顶部导航栏与bug，隐藏后在出现，滚动条会恢复原始。修复方案 state用redux管理 (もうフィクス)
     showSubsriButton(){
+        isButtonSub = this._getIsSubState()
         return(
             <TouchableHighlight onPress={()=>this._subsriAction()}
                                 underlayColor='#cccccc' style={styles.subscribeButton}>
                 <View style={{flex:1,justifyContent:'center',}}>
                     <Text style={{fontSize:16, color:'#802A2A'}}>
-                        订阅
+                        {isButtonSub?'已订阅':'订阅'}
                     </Text>
                 </View>
             </TouchableHighlight>
@@ -126,6 +163,10 @@ export default class LOLSpeicalColumnController extends React.Component
         navigate('ColumnDetail',{item : item})
     }
 
+    shouldComponentUpdate(nextProps, nextState) {
+        return true
+    }
+
     _listRemote = ()=> {
         return (
             fetch(lolDingyueApi).then((response)=>response.json())
@@ -136,9 +177,7 @@ export default class LOLSpeicalColumnController extends React.Component
                     recommend = responseJson.recommend_list
                     this.setState({
                         dataSourceArr:unbook_list,
-                        recommendArr:recommend
-                    })
-                    this.setState({
+                        recommendArr:recommend,
                         isRefreshing: false,
                     })
                 }).catch((error)=>{
@@ -156,19 +195,19 @@ export default class LOLSpeicalColumnController extends React.Component
 
     _firstSection = (item, index) => {
         return (
-            <SpeicalColumnCell item={item} index={index} onPress={(item, index)=>this._touchAction(item, index)}
+            <SpeicalColumnCellRedux item={item} index={index} section={0} onPress={(item, index)=>this._touchAction(item, index)}
                                showSubsri={false} />
         )
     }
     _secondSection = (item, index) => {
         return (
-            <SpeicalColumnCell item={item} index={index} onPress={(item, index)=>this._touchAction(item, index)}
+            <SpeicalColumnCellRedux item={item} index={index} section={1} onPress={(item, index)=>this._touchAction(item, index)}
                                showSubsri={true}/>
         )
     }
 
     _sectionHeader(section){
-        if (section == 0) {
+        if (section === 0) {
             return (
                 <View style={styles.sectionLaytout}>
                     <Text style={styles.textLayout}>栏目推荐</Text>
@@ -220,6 +259,11 @@ export default class LOLSpeicalColumnController extends React.Component
         )
     }
 }
+
+const SpeicalColumnCellRedux = connect(
+    mapToSubScribe,
+    mapDispatchProps,
+)(SpeicalColumnCell)
 
 const styles = StyleSheet.create({
     columnViewContainer: {

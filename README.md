@@ -7,6 +7,7 @@ League Of Legends In Hand
 * react-redux
 * react-native-swiper
 * react-navigation
+* react-native-tab-navigator
 
 # Plan
 * optimization setState method (shouldUpdateComponent)

@@ -8,8 +8,7 @@ League Of Legends In Hand
 * react-native-swiper
 * react-navigation
 
-# Project
-* add tabBar
+# Plan
 * optimization setState method (shouldUpdateComponent)
 
 ## How to view

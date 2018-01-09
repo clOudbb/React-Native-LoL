@@ -22,7 +22,6 @@ import {
     RefreshControl,
     Image,
 } from 'react-native';
-import ScrollableTabView, {DefaultTabBar, } from 'react-native-scrollable-tab-view';
 import {userModel} from '../Models/LOLUserModel'
 import {LOLMineWarListCell} from "./Views/LOLMineWarListCell";
 
@@ -85,13 +84,6 @@ export default class LOLMineViewController extends React.Component
     render(){
         return(
             <View style={styles.container}>
-                <ScrollableTabView
-                    style={{marginTop: menuViewTop,
-                    }}
-                    initialPage={0}
-                    renderTabBar={() => <DefaultTabBar backgroundColor='orange' />}
-                >
-                    <Text tabLabel='战绩'>
                         <View style={{backgroundColor: 'white',
                             flex :1,
                             width:kScreenWidth,
@@ -127,11 +119,6 @@ export default class LOLMineViewController extends React.Component
                             {/*>*/}
                             {/*</SectionList>*/}
                         </View>
-
-                    </Text>
-                    <Text tabLabel='能力'>favorite</Text>
-                    <Text tabLabel='资产'>project</Text>
-                </ScrollableTabView>
 
             </View>
         )

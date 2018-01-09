@@ -10,7 +10,11 @@
 #import <React/RCTRootView.h>
 #import <React/RCTBridgeModule.h>
 #import <React/RCTImageView.h>
-
+#if __has_include(<React/RCTViewManager.h>)
+#import <React/RCTViewManager.h>
+#else // back compatibility for RN version < 0.40
+#import "RCTViewManager.h"
+#endif
 @interface ReactViewController ()<RCTBridgeModule>
 
 @property (nullable, nonatomic, strong) RCTRootView *rootView;

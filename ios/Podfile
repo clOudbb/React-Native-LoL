@@ -21,7 +21,7 @@ target 'OC_React' do
     'RCTLinkingIOS',
  ]
   pod "yoga", :path => "../node_modules/react-native/ReactCommon/yoga"
-
+  
   target 'OC_ReactTests' do
     inherit! :search_paths
     # Pods for testing

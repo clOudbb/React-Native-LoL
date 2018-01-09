@@ -9,7 +9,6 @@
 /* Begin PBXBuildFile section */
 		1835CD18573A81D00FBF60B5 /* libPods-OC_ReactTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = FD3FED3DC27DE3D525C8C25B /* libPods-OC_ReactTests.a */; };
 		48ADEC6D6BB1F4CDD92694B9 /* libPods-OC_React.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E4B3285C2C8217D5F69FF11B /* libPods-OC_React.a */; };
-		7DFFF6F9A03C4CC09E613E4B /* libBVLinearGradient.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 6A6143EE3DF3479A98D7E1F4 /* libBVLinearGradient.a */; };
 		BEB7A5DD4A700FEE595958ED /* libPods-OC_ReactUITests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BCC8C7EED0BC17AFB489607A /* libPods-OC_ReactUITests.a */; };
 		C62AFE171F9D8F6C0024B7B8 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C62AFE161F9D8F6C0024B7B8 /* Main.storyboard */; };
 		C62DF6C41F6BE29500E9E077 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = C62DF6C31F6BE29500E9E077 /* main.m */; };
@@ -19,7 +18,6 @@
 		C62DF6E21F6BE29600E9E077 /* OC_ReactUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = C62DF6E11F6BE29600E9E077 /* OC_ReactUITests.m */; };
 		C62DF6F11F6BE29F00E9E077 /* RootViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C62DF6F01F6BE29F00E9E077 /* RootViewController.m */; };
 		C62DF6F41F6BE4CE00E9E077 /* ReactViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C62DF6F31F6BE4CE00E9E077 /* ReactViewController.m */; };
-		EFE1F37CB5694CF2A017C902 /* libRNSpinkit.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 744064610AAE4B74A67E6D5D /* libRNSpinkit.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -37,40 +35,11 @@
 			remoteGlobalIDString = C62DF6BE1F6BE29500E9E077;
 			remoteInfo = OC_React;
 		};
-		C6B4971B1FF0F35E00C91592 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = D9714CFCF75C4491B4121FD8 /* BVLinearGradient.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 134814201AA4EA6300B7C361;
-			remoteInfo = BVLinearGradient;
-		};
-		C6B4971D1FF0F35E00C91592 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = D9714CFCF75C4491B4121FD8 /* BVLinearGradient.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 64AA15081EF7F30100718508;
-			remoteInfo = "BVLinearGradient-tvOS";
-		};
-		C6B497211FF0F35E00C91592 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 4F32A55AD3F34755985C3B32 /* RNSpinkit.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = D42CB3511B2538DE00FD0AE2;
-			remoteInfo = RNSpinkit;
-		};
-		C6B497231FF0F35E00C91592 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 4F32A55AD3F34755985C3B32 /* RNSpinkit.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 641194871EC9FD4A00D4FC03;
-			remoteInfo = "RNSpinkit-tvOS";
-		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
 		1E8675DCBA53C9D8FAC07881 /* Pods-OC_ReactUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-OC_ReactUITests.release.xcconfig"; path = "Pods/Target Support Files/Pods-OC_ReactUITests/Pods-OC_ReactUITests.release.xcconfig"; sourceTree = "<group>"; };
 		3F380547BD7AB916C0C5E436 /* Pods-OC_React.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-OC_React.release.xcconfig"; path = "Pods/Target Support Files/Pods-OC_React/Pods-OC_React.release.xcconfig"; sourceTree = "<group>"; };
-		4F32A55AD3F34755985C3B32 /* RNSpinkit.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = RNSpinkit.xcodeproj; path = "../node_modules/react-native-spinkit/ios/RNSpinkit.xcodeproj"; sourceTree = "<group>"; };
 		55A58CCE1DC8B484CC945700 /* Pods-OC_ReactUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-OC_ReactUITests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-OC_ReactUITests/Pods-OC_ReactUITests.debug.xcconfig"; sourceTree = "<group>"; };
 		6A6143EE3DF3479A98D7E1F4 /* libBVLinearGradient.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libBVLinearGradient.a; sourceTree = "<group>"; };
 		744064610AAE4B74A67E6D5D /* libRNSpinkit.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libRNSpinkit.a; sourceTree = "<group>"; };
@@ -94,7 +63,6 @@
 		C62DF6F21F6BE4CE00E9E077 /* ReactViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ReactViewController.h; sourceTree = "<group>"; };
 		C62DF6F31F6BE4CE00E9E077 /* ReactViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ReactViewController.m; sourceTree = "<group>"; };
 		C84EFDDEA85CD75665F4F56C /* Pods-OC_ReactTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-OC_ReactTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-OC_ReactTests/Pods-OC_ReactTests.debug.xcconfig"; sourceTree = "<group>"; };
-		D9714CFCF75C4491B4121FD8 /* BVLinearGradient.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = BVLinearGradient.xcodeproj; path = "../node_modules/react-native-linear-gradient/BVLinearGradient.xcodeproj"; sourceTree = "<group>"; };
 		E4B3285C2C8217D5F69FF11B /* libPods-OC_React.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-OC_React.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		E62AEB35061366A15FF67760 /* Pods-OC_ReactTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-OC_ReactTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-OC_ReactTests/Pods-OC_ReactTests.release.xcconfig"; sourceTree = "<group>"; };
 		FD3FED3DC27DE3D525C8C25B /* libPods-OC_ReactTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-OC_ReactTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -106,8 +74,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				48ADEC6D6BB1F4CDD92694B9 /* libPods-OC_React.a in Frameworks */,
-				EFE1F37CB5694CF2A017C902 /* libRNSpinkit.a in Frameworks */,
-				7DFFF6F9A03C4CC09E613E4B /* libBVLinearGradient.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -133,8 +99,6 @@
 		25DB23288DE544909A2BFEB6 /* Libraries */ = {
 			isa = PBXGroup;
 			children = (
-				4F32A55AD3F34755985C3B32 /* RNSpinkit.xcodeproj */,
-				D9714CFCF75C4491B4121FD8 /* BVLinearGradient.xcodeproj */,
 			);
 			name = Libraries;
 			sourceTree = "<group>";
@@ -238,24 +202,6 @@
 			name = "Recovered References";
 			sourceTree = "<group>";
 		};
-		C6B497151FF0F35C00C91592 /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				C6B497221FF0F35E00C91592 /* libRNSpinkit.a */,
-				C6B497241FF0F35E00C91592 /* libRNSpinkit.a */,
-			);
-			name = Products;
-			sourceTree = "<group>";
-		};
-		C6B497171FF0F35C00C91592 /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				C6B4971C1FF0F35E00C91592 /* libBVLinearGradient.a */,
-				C6B4971E1FF0F35E00C91592 /* libBVLinearGradient.a */,
-			);
-			name = Products;
-			sourceTree = "<group>";
-		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -357,16 +303,6 @@
 			mainGroup = C62DF6B61F6BE29500E9E077;
 			productRefGroup = C62DF6C01F6BE29500E9E077 /* Products */;
 			projectDirPath = "";
-			projectReferences = (
-				{
-					ProductGroup = C6B497171FF0F35C00C91592 /* Products */;
-					ProjectRef = D9714CFCF75C4491B4121FD8 /* BVLinearGradient.xcodeproj */;
-				},
-				{
-					ProductGroup = C6B497151FF0F35C00C91592 /* Products */;
-					ProjectRef = 4F32A55AD3F34755985C3B32 /* RNSpinkit.xcodeproj */;
-				},
-			);
 			projectRoot = "";
 			targets = (
 				C62DF6BE1F6BE29500E9E077 /* OC_React */,
@@ -375,37 +311,6 @@
 			);
 		};
 /* End PBXProject section */
-
-/* Begin PBXReferenceProxy section */
-		C6B4971C1FF0F35E00C91592 /* libBVLinearGradient.a */ = {
-			isa = PBXReferenceProxy;
-			fileType = archive.ar;
-			path = libBVLinearGradient.a;
-			remoteRef = C6B4971B1FF0F35E00C91592 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		C6B4971E1FF0F35E00C91592 /* libBVLinearGradient.a */ = {
-			isa = PBXReferenceProxy;
-			fileType = archive.ar;
-			path = libBVLinearGradient.a;
-			remoteRef = C6B4971D1FF0F35E00C91592 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		C6B497221FF0F35E00C91592 /* libRNSpinkit.a */ = {
-			isa = PBXReferenceProxy;
-			fileType = archive.ar;
-			path = libRNSpinkit.a;
-			remoteRef = C6B497211FF0F35E00C91592 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		C6B497241FF0F35E00C91592 /* libRNSpinkit.a */ = {
-			isa = PBXReferenceProxy;
-			fileType = archive.ar;
-			path = libRNSpinkit.a;
-			remoteRef = C6B497231FF0F35E00C91592 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-/* End PBXReferenceProxy section */
 
 /* Begin PBXResourcesBuildPhase section */
 		C62DF6BD1F6BE29500E9E077 /* Resources */ = {

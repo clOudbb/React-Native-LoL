@@ -55,6 +55,7 @@ import {
 } from 'react-native';
 import {GeneralControllerCell} from "./GeneralController/Views/GeneralControllerCell";
 import TabNavigator from "react-native-tab-navigator";
+import LOLMineViewController from "./Mine/LOLMineViewController";
 
 /*
  <NavigatorIOS
@@ -151,7 +152,9 @@ class RNHighScores extends React.Component {
     secondTabBarItem(){
         return (
             <View style={styles.divLayout}>
-
+                <View>
+                    <LOLMineViewController/>
+                </View>
             </View>
         )
     }

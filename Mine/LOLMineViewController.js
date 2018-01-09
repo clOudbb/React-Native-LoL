@@ -1,25 +1,10 @@
 /**
- * Created by zhangzhenghong on 2017/11/22.
+ * Created by zhangzhenghong on 2018/1/9.
  */
 
 import React, { Component } from 'react';
 
 import {
-    lolListApi,
-    bilibiliApi,
-    lolActivityApi,
-    lolAllChannel,
-    lolBannerApi,
-    lolDingyueApi,
-    lolGonglueApi,
-    lolGuanfangApi,
-    lolYule,
-    lolBetaChange,
-    loljiqiansai,
-    lolFreeHeroWeek,
-    lolHeroChannel,
-    lolAllVideo,
-    lolHotHero,
     _keyExtractor,
     _handleCount,
 } from '../RemoteManager';
@@ -37,14 +22,14 @@ import {
     RefreshControl,
     Image,
 } from 'react-native';
-import {GeneralControllerCell} from "./Views/GeneralControllerCell";
-import BigImageCell from './Views/BigImageCell'
-import VersionChangesHeadView from "./Views/VersionChangesHeadView";
+import ScrollableTabView, {DefaultTabBar, } from 'react-native-scrollable-tab-view';
+import {userModel} from '../Models/LOLUserModel'
+import {LOLMineWarListCell} from "./Views/LOLMineWarListCell";
 
 const kScreenWidth = Dimensions.get('window').width
 const kScreenHeight = Dimensions.get('window').height
 
-export default class LOLGeneralController extends React.Component
+export default class LOLMineViewController extends React.Component
 {
     constructor(props){
         super(props)
@@ -57,56 +42,39 @@ export default class LOLGeneralController extends React.Component
         this._listRemote()
     }
 
+    componentWillUnmount() {
+        this.timer && clearTimeout(this.timer)
+    }
+
     _touchAction = (item, index)=>{
-        const {navigate} = this.props.navigation
-        navigate('Web',{url:item.article_url, item : item})
+        // const {navigate} = this.props.navigation
+        // navigate('Web',{url:item.article_url, item : item})
     }
 
     _listRemote = ()=> {
+        this.setState({
+            isRefreshing: true
+        })
         return (
-            fetch(loljiqiansai).then((response)=>response.json())
-                .then((responseJson)=>{
-                    var arr = new Array()
-                    arr = responseJson.list
-                    this.setState({
-                        dataSourceArr:arr,
-                        isRefreshing: false,
-                    })
-                }).catch((error)=>{
-                console.log(error)
+            this.timer = setTimeout(()=>{
                 this.setState({
-                    isRefreshing: false,
+                    dataSourceArr: userModel.war,
+                    isRefreshing: false
                 })
-            })
+            },1000)
         )
     }
 
-    _otherRemote = ()=>{
-        return (
-            fetch(lolBetaChange)
-                .then((response)=>response.json())
-                .then((responseJson)=>{
-
-            })
-        )
-    }
 
     _onRefresh = () => {
         this._listRemote()
     }
 
     _renderItem = (item, index) => {
-        if (item.image_spec == 3) {
-            return (
-                <BigImageCell item={item} index={index} _touchAction={(item,index)=>this._touchAction(item, index)}>
-
-                </BigImageCell>
-            )
-        }
         return (
-            <GeneralControllerCell item={item} index={index} _touchAction={(item, index)=>this._touchAction(item,index)}>
+            <LOLMineWarListCell item={item} index={index} _touchAction={(item, index)=>this._touchAction(item,index)}>
 
-            </GeneralControllerCell>
+            </LOLMineWarListCell>
         )
     }
 
@@ -117,46 +85,68 @@ export default class LOLGeneralController extends React.Component
     render(){
         return(
             <View style={styles.container}>
-                <SectionList ref={(c)=>this._sectionList = c}
-                             data={this.state.dataSourceArr}
-                             ListHeaderComponent={()=>{
-                                 return (
-                                     <VersionChangesHeadView/>
-                                 )
-                             }}
-                             // ListHeaderComponent = {()=> this._banner()}
-                    // renderSectionHeader={({section}) => (this._sectionHeader())}
-                             style={styles.tableViewLayout}
-                             sections={[ // 不同section渲染相同类型的子组件
-                                 {data:this.state.dataSourceArr, renderItem:({item, index}) => this._renderItem(item, index)},
-                             ]}
-                             keyExtractor = {(item, index)=>_keyExtractor(item, index)}
-                             onScroll={(e)=>{this._onScroll(e)}}
-                             scrollEventThrottle={1}  //监听频率
-                             refreshControl={
-                                 <RefreshControl
-                                     refreshing={this.state.isRefreshing}
-                                     onRefresh={this._onRefresh}
-                                     tintColor="#cccccc"
-                                     title="Loading..."
-                                     titleColor="#000000"
-                                     colors={['#ff0000', '#00ff00', '#0000ff']}
-                                     progressBackgroundColor="#ffff00"
-                                 />
-                             }
-
+                <ScrollableTabView
+                    style={{marginTop: menuViewTop,
+                    }}
+                    initialPage={0}
+                    renderTabBar={() => <DefaultTabBar backgroundColor='orange' />}
                 >
-                </SectionList>
+                    <Text tabLabel='战绩'>
+                        <View style={{backgroundColor: 'white',
+                            flex :1,
+                            width:kScreenWidth,
+                            height:kScreenHeight - menuViewTop - tabBarHeight,
+                        }}>
+                            {/*<SectionList ref={(c)=>this._sectionList = c}*/}
+                            {/*data={this.state.dataSourceArr}*/}
+                            {/*// ListHeaderComponent={()=>{*/}
+                            {/*// return (*/}
+                            {/*// <VersionChangesHeadView/>*/}
+                            {/*// )*/}
+                            {/*// }}*/}
+                            {/*// ListHeaderComponent = {()=> this._banner()}*/}
+                            {/*// renderSectionHeader={({section}) => (this._sectionHeader())}*/}
+                            {/*style={styles.tableViewLayout}*/}
+                            {/*sections={[ // 不同section渲染相同类型的子组件*/}
+                            {/*{data:this.state.dataSourceArr, renderItem:({item, index}) => this._renderItem(item, index)},*/}
+                            {/*]}*/}
+                            {/*keyExtractor = {(item, index)=>_keyExtractor(item, index)}*/}
+                            {/*scrollEventThrottle={1}  //监听频率*/}
+                            {/*refreshControl={*/}
+                            {/*<RefreshControl*/}
+                            {/*refreshing={this.state.isRefreshing}*/}
+                            {/*onRefresh={this._onRefresh}*/}
+                            {/*tintColor="#cccccc"*/}
+                            {/*title="Loading..."*/}
+                            {/*titleColor="#000000"*/}
+                            {/*colors={['#ff0000', '#00ff00', '#0000ff']}*/}
+                            {/*progressBackgroundColor="#ffff00"*/}
+                            {/*/>*/}
+                            {/*}*/}
+
+                            {/*>*/}
+                            {/*</SectionList>*/}
+                        </View>
+
+                    </Text>
+                    <Text tabLabel='能力'>favorite</Text>
+                    <Text tabLabel='资产'>project</Text>
+                </ScrollableTabView>
+
             </View>
         )
     }
 }
+
+
 
 const naviBarHeight = (kScreenHeight>=812?88:64)
 const tabBarHeight = (kScreenHeight>=812?83:49)
 const cellMargin = 10;
 const tableViewTop = (kScreenHeight>=812?44:0)
 const statusBarHeight = (kScreenHeight>=812?44:20)
+
+const menuViewTop = 100
 const styles = StyleSheet.create({
     container: {
         flex: 1,
@@ -166,10 +156,6 @@ const styles = StyleSheet.create({
     },
 
     tableViewLayout: {
-        marginTop:tableViewTop,
-        marginBottom:0,
-        marginLeft:0,
-        marginRight:0,
         flex:1,
     },
 

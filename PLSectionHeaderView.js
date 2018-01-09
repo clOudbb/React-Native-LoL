@@ -119,37 +119,6 @@ export default class PLSectionHeaderView extends React.Component
         this._list.setNativeProps({
             style:{top : z_offSet}
         })
-        // if (z_offSet === 44 && this.state._changedHeaderView === false)
-        // {
-        //     this._list.setNativeProps({
-        //         style:{top : z_offSet}
-        //     })
-        //     this.setState({
-        //         _changedHeaderView:true,
-        //     })
-        // }
-        // else if (z_offSet < 44 && this.state._changedHeaderView === true)
-        // {
-        //     this._list.setNativeProps({
-        //         style:{top : z_offSet}
-        //     })
-        // }
-        // else if (z_offSet < 44 && this.state._changedHeaderView === false)
-        // {
-        //     this._list.setNativeProps({
-        //         style:{top : z_offSet}
-        //     })
-        // }
-        // else if (z_offSet === 0)
-        // {
-        //     this._list.setNativeProps({
-        //         style:{top : z_offSet}
-        //     })
-        //     this.setState({
-        //         _changedHeaderView:false,
-        //     })
-        // }
-
     }
 
 

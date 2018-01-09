@@ -54,10 +54,11 @@ export default class LOLMineViewController extends React.Component
         this.setState({
             isRefreshing: true
         })
+        let list = userModel.war
         return (
             this.timer = setTimeout(()=>{
                 this.setState({
-                    dataSourceArr: userModel.war,
+                    dataSourceArr: list,
                     isRefreshing: false
                 })
             },1000)
@@ -89,35 +90,35 @@ export default class LOLMineViewController extends React.Component
                             width:kScreenWidth,
                             height:kScreenHeight - menuViewTop - tabBarHeight,
                         }}>
-                            {/*<SectionList ref={(c)=>this._sectionList = c}*/}
-                            {/*data={this.state.dataSourceArr}*/}
-                            {/*// ListHeaderComponent={()=>{*/}
-                            {/*// return (*/}
-                            {/*// <VersionChangesHeadView/>*/}
-                            {/*// )*/}
-                            {/*// }}*/}
-                            {/*// ListHeaderComponent = {()=> this._banner()}*/}
-                            {/*// renderSectionHeader={({section}) => (this._sectionHeader())}*/}
-                            {/*style={styles.tableViewLayout}*/}
-                            {/*sections={[ // 不同section渲染相同类型的子组件*/}
-                            {/*{data:this.state.dataSourceArr, renderItem:({item, index}) => this._renderItem(item, index)},*/}
-                            {/*]}*/}
-                            {/*keyExtractor = {(item, index)=>_keyExtractor(item, index)}*/}
-                            {/*scrollEventThrottle={1}  //监听频率*/}
-                            {/*refreshControl={*/}
-                            {/*<RefreshControl*/}
-                            {/*refreshing={this.state.isRefreshing}*/}
-                            {/*onRefresh={this._onRefresh}*/}
-                            {/*tintColor="#cccccc"*/}
-                            {/*title="Loading..."*/}
-                            {/*titleColor="#000000"*/}
-                            {/*colors={['#ff0000', '#00ff00', '#0000ff']}*/}
-                            {/*progressBackgroundColor="#ffff00"*/}
-                            {/*/>*/}
-                            {/*}*/}
+                            <SectionList ref={(c)=>this._sectionList = c}
+                            data={this.state.dataSourceArr}
+                            // ListHeaderComponent={()=>{
+                            // return (
+                            // <VersionChangesHeadView/>
+                            // )
+                            // }}
+                            // ListHeaderComponent = {()=> this._banner()}
+                            // renderSectionHeader={({section}) => (this._sectionHeader())}
+                            style={styles.tableViewLayout}
+                            sections={[ // 不同section渲染相同类型的子组件
+                            {data:this.state.dataSourceArr, renderItem:({item, index}) => this._renderItem(item, index)},
+                            ]}
+                            keyExtractor = {(item, index)=>_keyExtractor(item, index)}
+                            scrollEventThrottle={1}  //监听频率
+                            refreshControl={
+                            <RefreshControl
+                            refreshing={this.state.isRefreshing}
+                            onRefresh={this._onRefresh}
+                            tintColor="#cccccc"
+                            title="Loading..."
+                            titleColor="#000000"
+                            colors={['#ff0000', '#00ff00', '#0000ff']}
+                            progressBackgroundColor="#ffff00"
+                            />
+                            }
 
-                            {/*>*/}
-                            {/*</SectionList>*/}
+                            >
+                            </SectionList>
                         </View>
 
             </View>

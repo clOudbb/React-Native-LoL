@@ -36,35 +36,34 @@ export class LOLMineWarListCell extends React.Component
         return (
             <View style={styles.cellLaytout}>
 
-                {/*<TouchableHighlight style={styles.cellTouchableStyle}*/}
-                                    {/*onPress={()=>{this._touchAction(item, index)}}>*/}
-                    {/*<View style={styles.cellContainStyle}>*/}
+                <TouchableHighlight style={styles.cellTouchableStyle}
+                                    onPress={()=>{this._touchAction(item, index)}}>
+                    <View style={styles.cellContainStyle}>
 
-                        {/*<View style={styles.cellTextLayout}>*/}
-                            {/*<Text style={styles.textLayout} numberOfLines={1}>{item.title}</Text>*/}
-                            {/*<Text style={styles.summaryTextStyle} numberOfLines={2}>{item.summary}</Text>*/}
-                            {/*<Text style={[styles.summaryTextStyle, styles.dateTextStyle]}>*/}
-                                {/*{item.publication_date + ' '}*/}
-                                {/*<Text style={styles.summaryTextStyle}>{_handleCount(item) + '万阅'}</Text>*/}
-                            {/*</Text>*/}
-                        {/*</View>*/}
-                        {/*<Image style={styles.imageViewLayout}*/}
-                               {/*source={{uri:item.image_url_small}}*/}
-                        {/*/>*/}
-                        {/*<View style={{*/}
-                            {/*position:'absolute',*/}
-                            {/*backgroundColor:'#cccccc',*/}
-                            {/*height:0.5,*/}
-                            {/*left:20,*/}
-                            {/*right:20,*/}
-                            {/*bottom:0*/}
-                        {/*}}>*/}
+                        <View style={styles.cellTextLayout}>
+                            <Text style={styles.textLayout} numberOfLines={1}>{item.hero}</Text>
+                            <Text style={styles.summaryTextStyle} numberOfLines={2}>{''+item.kill+'杀'+item.dead+'死'+item.assists+'助'}</Text>
+                            <Text style={[styles.summaryTextStyle, styles.dateTextStyle]}>
+                                {item.time + ' '}
+                            </Text>
+                        </View>
+                        <Image style={styles.imageViewLayout}
+                               source={{uri:item.img}}
+                        />
+                        <View style={{
+                            position:'absolute',
+                            backgroundColor:'#cccccc',
+                            height:0.5,
+                            left:20,
+                            right:20,
+                            bottom:0
+                        }}>
 
-                        {/*</View>*/}
-                    {/*</View>*/}
+                        </View>
+                    </View>
 
 
-                {/*</TouchableHighlight>*/}
+                </TouchableHighlight>
 
             </View>
         )

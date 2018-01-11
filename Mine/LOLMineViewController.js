@@ -24,6 +24,8 @@ import {
 } from 'react-native';
 import {userModel} from '../Models/LOLUserModel'
 import {LOLMineWarListCell} from "./Views/LOLMineWarListCell";
+import {LOLMineHeadView} from "./Views/LOLMineHeadView";
+import {LOLWarLevelCell} from "./Views/LOLWarLevelCell";
 
 const kScreenWidth = Dimensions.get('window').width
 const kScreenHeight = Dimensions.get('window').height
@@ -78,48 +80,89 @@ export default class LOLMineViewController extends React.Component
         )
     }
 
+    _levelRender = (index) => {
+        return (
+            <LOLWarLevelCell/>
+        )
+    }
+
     _onScroll(e){
         this.props.onScroll(e)
+    }
+
+    _sectionHeader = (section)=>{
+        if (section.key === 'secondSection') {
+            return (
+                <View style={{
+                    height: 50,
+                    flex:1,
+                    justifyContent:'center',
+                    backgroundColor:'#ffffff',
+                }}>
+                    <View style={{
+                        backgroundColor:'#cccccc',
+                        height:0.5,
+                        position:'absolute',
+                        top:0,
+                        left:0,
+                        right:0,
+                    }}></View>
+                    <Text style={{
+                        fontSize:20,
+                        marginLeft:10,
+                        fontFamily:'Helvetica Bold'
+                    }}>战绩</Text>
+                    <View style={{
+                        backgroundColor:'#cccccc',
+                        height:0.5,
+                        position:'absolute',
+                        bottom:0,
+                        left:0,
+                        right:0,
+                    }}></View>
+                </View>
+            )
+        }
     }
 
     render(){
         return(
             <View style={styles.container}>
-                        <View style={{backgroundColor: 'white',
-                            flex :1,
-                            width:kScreenWidth,
-                            height:kScreenHeight - menuViewTop - tabBarHeight,
-                        }}>
-                            <SectionList ref={(c)=>this._sectionList = c}
-                            data={this.state.dataSourceArr}
-                            // ListHeaderComponent={()=>{
-                            // return (
-                            // <VersionChangesHeadView/>
-                            // )
-                            // }}
-                            // ListHeaderComponent = {()=> this._banner()}
-                            // renderSectionHeader={({section}) => (this._sectionHeader())}
-                            style={styles.tableViewLayout}
-                            sections={[ // 不同section渲染相同类型的子组件
-                            {data:this.state.dataSourceArr, renderItem:({item, index}) => this._renderItem(item, index)},
-                            ]}
-                            keyExtractor = {(item, index)=>_keyExtractor(item, index)}
-                            scrollEventThrottle={1}  //监听频率
-                            refreshControl={
-                            <RefreshControl
-                            refreshing={this.state.isRefreshing}
-                            onRefresh={this._onRefresh}
-                            tintColor="#cccccc"
-                            title="Loading..."
-                            titleColor="#000000"
-                            colors={['#ff0000', '#00ff00', '#0000ff']}
-                            progressBackgroundColor="#ffff00"
-                            />
-                            }
+                <View style={{backgroundColor: 'white',
+                    flex :1,
+                    width:kScreenWidth,
+                    height:kScreenHeight - menuViewTop - tabBarHeight,
+                }}>
+                    <SectionList ref={(c)=>this._sectionList = c}
+                                 ListHeaderComponent={()=>{
+                                     return (
+                                         <LOLMineHeadView/>
+                                     )
+                                 }}
+                        // ListHeaderComponent = {()=> this._banner()}
+                                 renderSectionHeader={({section}) => (this._sectionHeader(section))}
+                                 style={styles.tableViewLayout}
+                                 sections={[ // 不同section渲染相同类型的子组件
+                                     {key:'firstSection', data:[userModel], renderItem:({index}) => this._levelRender(index)},
+                                     {key:'secondSection', data:this.state.dataSourceArr, renderItem:({item, index}) => this._renderItem(item, index)},
+                                 ]}
+                                 keyExtractor = {(item, index)=>_keyExtractor(item, index)}
+                                 scrollEventThrottle={1}  //监听频率
+                                 refreshControl={
+                                     <RefreshControl
+                                         refreshing={this.state.isRefreshing}
+                                         onRefresh={this._onRefresh}
+                                         tintColor="#cccccc"
+                                         title="Loading..."
+                                         titleColor="#000000"
+                                         colors={['#ff0000', '#00ff00', '#0000ff']}
+                                         progressBackgroundColor="#ffff00"
+                                     />
+                                 }
 
-                            >
-                            </SectionList>
-                        </View>
+                    >
+                    </SectionList>
+                </View>
 
             </View>
         )
@@ -145,6 +188,7 @@ const styles = StyleSheet.create({
 
     tableViewLayout: {
         flex:1,
+        marginBottom:tabBarHeight
     },
 
     divLayout:{

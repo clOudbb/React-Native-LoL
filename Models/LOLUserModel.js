@@ -32,11 +32,20 @@ var warModelThird = {
 
 export const userModel = {
     img:require('../Image/1.jpg'),
-    name : 'paladin',
+    name : '不来方夕莉丶丶',
     war:[
         warModelFirst,
         warModelSecond,
-        warModelThird
+        warModelThird,
+        warModelFirst,
+        warModelSecond,
+        warModelThird,
+        warModelFirst,
+        warModelSecond,
+        warModelThird,
+        warModelFirst,
+        warModelSecond,
+        warModelThird,
     ]
 }
 

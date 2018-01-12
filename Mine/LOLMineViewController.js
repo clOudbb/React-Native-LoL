@@ -47,6 +47,10 @@ export default class LOLMineViewController extends React.Component
         this.timer && clearTimeout(this.timer)
     }
 
+    shouldComponentUpdate(nextProps, nextState) {
+        return true
+    }
+
     _touchAction = (item, index)=>{
         // const {navigate} = this.props.navigation
         // navigate('Web',{url:item.article_url, item : item})
@@ -106,7 +110,8 @@ export default class LOLMineViewController extends React.Component
                         top:0,
                         left:0,
                         right:0,
-                    }}></View>
+                    }}>
+                    </View>
                     <Text style={{
                         fontSize:20,
                         marginLeft:10,
@@ -119,7 +124,8 @@ export default class LOLMineViewController extends React.Component
                         bottom:0,
                         left:0,
                         right:0,
-                    }}></View>
+                    }}>
+                    </View>
                 </View>
             )
         }

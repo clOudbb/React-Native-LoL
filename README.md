@@ -13,7 +13,8 @@ League Of Legends In Hand
 * optimization setState method (shouldUpdateComponent)
 
 # View
-<img src='http://wx2.sinaimg.cn/mw690/005Duxwwgy1fngkb5ebjmg308c0i51l8.gif' width='25%' height='25%' />
+<img src='http://wx1.sinaimg.cn/mw690/005Duxwwgy1fngl0zl596g308c0i57wj.gif' width='25%' height='25%' />
+<img src='http://wx1.sinaimg.cn/mw690/005Duxwwgy1fngl12vsjjg308c0i57wi.gif' width='25%' height='25%' />
                                                                                                 
 ## How to view
 ```shell

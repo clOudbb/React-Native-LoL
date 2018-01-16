@@ -32,65 +32,9 @@ import {
     Button,
     PanResponder,
 } from 'react-native';
+import SpecialColumnHeadView from './Views/SpecialColumnHeadView'
 import ParallaxScrollView from 'react-native-parallax-scroll-view';
 
-class ColumnHeaderView extends React.Component
-{
-    constructor(props){
-        super(props)
-        this.state = {
-            isRefreshing:false,
-        }
-
-    }
-
-    componentDidMount() {
-
-    }
-
-
-    setNativeProps(props){
-        this.e.setNativeProps(props)
-    }
-
-    render(){
-        let item = this.props.item
-        let style = this.props.style
-        return(
-            <View style={style} ref={(e)=>this.e=e}>
-                <View style={styles.cellContainViewStyle}>
-                    <Image source={{uri:item.logo}} style={styles.imageViewLayout}/>
-                    <View style={{flex:1,
-                        marginLeft:cellMargin,
-                        marginRight:cellMargin,
-                    }}>
-                        <Text style={{fontSize:20}}>{item.col_title}</Text>
-                        <View style={{marginTop:10,}}>
-                            <Text style={{fontSize:16, color:'#b1b1b1'}}>
-                                {item.author}
-                            </Text>
-                        </View>
-                    </View>
-                    <Text style={{
-                        fontSize:14, marginTop:10, color:'#cccccc',
-                        position:'absolute',
-                        left:cellMargin,
-                        right:cellMargin,
-                        bottom:cellMargin,
-                    }} numberOfLines={1}>{item.col_des}</Text>
-                    <TouchableHighlight onPress={()=>this._subsriAction()}
-                                        underlayColor='#cccccc' style={styles.subscribeButton}>
-                        <View style={{flex:1,justifyContent:'center',}}>
-                            <Text style={{fontSize:16, color:'#802A2A'}}>
-                                订阅
-                            </Text>
-                        </View>
-                    </TouchableHighlight>
-                </View>
-            </View>
-        )
-    }
-}
 
 class ColumnListCell extends React.Component
 {
@@ -273,13 +217,19 @@ export default class LOLSpeicalColumnDetailController extends React.Component
 
     headerViewComponent(){
         let propsItem = this.state.item
+        let store = this.props.navigation.state.params.store
+        let index = this.props.navigation.state.params.index
+        let section = this.props.navigation.state.params.section
         return (
-            <ColumnHeaderView style={{
+            <SpecialColumnHeadView style={{
                 backgroundColor:'#2E8B57',
                 opacity:1,
                 height:headViewHeight,
                 marginTop:0,
-            }} item={propsItem} ref={(headerView)=>this.headerView=headerView} navigation={this.props.navigation}/>
+            }} item={propsItem} ref={(headerView)=>this.headerView=headerView} navigation={this.props.navigation}
+            store={store}
+            index={index}
+            section={section}/>
         )
     }
 

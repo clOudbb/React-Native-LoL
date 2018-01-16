@@ -116,7 +116,7 @@ class SpeicalColumnCell extends React.Component
     render() {
         let item = this.props.item
         return (
-            <TouchableHighlight style={{flex:1,}} onPress={()=>this.props.onPress(item, this.props.index)}>
+            <TouchableHighlight style={{flex:1,}} onPress={()=>this.props.onPress(item, this.props.index, this.props.section)}>
                 <View style={styles.cellContainViewStyle}>
                     <Image source={{uri:item.logo}} style={styles.imageViewLayout}/>
                     <View style={{flex:1,
@@ -144,7 +144,7 @@ class SpeicalColumnCell extends React.Component
     }
 }
 
-export default class LOLSpeicalColumnController extends React.Component
+class LOLSpeicalColumnController extends React.Component
 {
     constructor(props){
         super(props)
@@ -158,9 +158,10 @@ export default class LOLSpeicalColumnController extends React.Component
         this._listRemote()
     }
 
-    _touchAction = (item, index)=>{
+    _touchAction = (item, index, section)=>{
         const {navigate} = this.props.navigation
-        navigate('ColumnDetail',{item : item})
+        const {store} = this.props
+        navigate('ColumnDetail',{item : item, store:store, index: index, section: section})
     }
 
     shouldComponentUpdate(nextProps, nextState) {
@@ -195,13 +196,13 @@ export default class LOLSpeicalColumnController extends React.Component
 
     _firstSection = (item, index) => {
         return (
-            <SpeicalColumnCellRedux item={item} index={index} section={0} onPress={(item, index)=>this._touchAction(item, index)}
+            <SpeicalColumnCellRedux item={item} index={index} section={0} onPress={(item, index,section)=>this._touchAction(item, index, section)}
                                showSubsri={false} />
         )
     }
     _secondSection = (item, index) => {
         return (
-            <SpeicalColumnCellRedux item={item} index={index} section={1} onPress={(item, index)=>this._touchAction(item, index)}
+            <SpeicalColumnCellRedux item={item} index={index} section={1} onPress={(item, index, section)=>this._touchAction(item, index, section)}
                                showSubsri={true}/>
         )
     }
@@ -264,6 +265,11 @@ const SpeicalColumnCellRedux = connect(
     mapToSubScribe,
     mapDispatchProps,
 )(SpeicalColumnCell)
+
+export default connect(
+    mapToSubScribe,
+    mapDispatchProps,
+)(LOLSpeicalColumnController)
 
 const styles = StyleSheet.create({
     columnViewContainer: {

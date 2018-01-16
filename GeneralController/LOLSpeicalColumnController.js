@@ -103,9 +103,9 @@ class SpeicalColumnCell extends React.Component
         isButtonSub = this._getIsSubState()
         return(
             <TouchableHighlight onPress={()=>this._subsriAction()}
-                                underlayColor='#cccccc' style={styles.subscribeButton}>
-                <View style={{flex:1,justifyContent:'center',}}>
-                    <Text style={{fontSize:16, color:'#802A2A'}}>
+                                underlayColor='#cccccc' style={[styles.subscribeButton, isButtonSub?{backgroundColor:'#802a2a'}:null]}>
+                <View style={{flex:1,justifyContent:'center'}}>
+                    <Text style={isButtonSub?{fontSize:16, color:'#ffffff'}:{fontSize:16, color:'#802A2A'}}>
                         {isButtonSub?'已订阅':'订阅'}
                     </Text>
                 </View>

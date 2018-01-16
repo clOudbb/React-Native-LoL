@@ -110,18 +110,18 @@ export default class LOLSpeicalColumnDetailController extends React.Component
         }
 
 
-        this._panResponder = PanResponder.create({
-            // 要求成为响应者：
-            onStartShouldSetPanResponder: (e, g) => this._startShouldSetPanResponder(e, g),
-            onStartShouldSetPanResponderCapture: (evt, gestureState) => this._startShouldSetPanResponderCapture(evt, gestureState),
-            onMoveShouldSetPanResponderCapture: (evt, gestureState) => this._moveShouldSetPanResponderCapture(evt, gestureState),
-            onPanResponderGrant: () => {
-
-            },
-            onPanResponderRelease: (e, g)=> this._onPanResponderRelease(e, g),
-            onMoveShouldSetResponder:(e, g)=> this._onMoveShouldSetResponder(e, g),
-            onPanResponderMove: (evt, gestureState)=>this._panMoveGesture(evt, gestureState),
-        });
+        // this._panResponder = PanResponder.create({
+        //     // 要求成为响应者：
+        //     onStartShouldSetPanResponder: (e, g) => this._startShouldSetPanResponder(e, g),
+        //     onStartShouldSetPanResponderCapture: (evt, gestureState) => this._startShouldSetPanResponderCapture(evt, gestureState),
+        //     onMoveShouldSetPanResponderCapture: (evt, gestureState) => this._moveShouldSetPanResponderCapture(evt, gestureState),
+        //     onPanResponderGrant: () => {
+        //
+        //     },
+        //     onPanResponderRelease: (e, g)=> this._onPanResponderRelease(e, g),
+        //     onMoveShouldSetResponder:(e, g)=> this._onMoveShouldSetResponder(e, g),
+        //     onPanResponderMove: (evt, gestureState)=>this._panMoveGesture(evt, gestureState),
+        // });
 
     }
 
@@ -182,27 +182,6 @@ export default class LOLSpeicalColumnDetailController extends React.Component
         tempSectionListOffsetY = contentOffsetY
     }
 
-    _scrollViewOnScroll(e){
-        var contentOffsetY = e.nativeEvent.contentOffset.y
-        tempScrollOffsetY = contentOffsetY
-        if (contentOffsetY >= 0 && contentOffsetY <= (200 - naviBarHeight)) {
-            let opac = contentOffsetY / (200 - naviBarHeight)
-            this.cusNavi.setNativeProps({
-                style:{
-                    opacity: opac,
-                }
-            })
-        } else if (contentOffsetY > (200 - naviBarHeight)) {
-            if (this.cusNavi.props.style.opacity !== 1) {
-                this.cusNavi.setNativeProps({
-                    style:{
-                        opacity: 1,
-                    }
-                })
-            }
-        }
-
-    }
 
     /**
      * 这里对原版的实现，RN里暂时不知道如何去实现
@@ -227,9 +206,9 @@ export default class LOLSpeicalColumnDetailController extends React.Component
                 height:headViewHeight,
                 marginTop:0,
             }} item={propsItem} ref={(headerView)=>this.headerView=headerView} navigation={this.props.navigation}
-            store={store}
-            index={index}
-            section={section}/>
+                                   store={store}
+                                   index={index}
+                                   section={section}/>
         )
     }
 
@@ -349,57 +328,93 @@ export default class LOLSpeicalColumnDetailController extends React.Component
         return true
     }
 
+    /**
+     *  scroll View call back function
+     */
+    _onTouchMove(e){
+        // let now_locationY = e.nativeEvent.locationY
+        // console.log('now = ' + now_locationY)
+        // console.log('before = ' + before_locationY)
+        //
+        // if (tempScrollOffsetY <= 0) {
+        //     if (before_locationY !== 0) {
+        //         this._sectionList.scrollToOffset({
+        //             animated:false,
+        //             offset:now_locationY - before_locationY,
+        //         })
+        //     }
+        //     before_locationY = e.nativeEvent.locationY
+        // }
+    }
+
+
+    _scrollViewOnScroll(e){
+        var contentOffsetY = e.nativeEvent.contentOffset.y
+        tempScrollOffsetY = contentOffsetY
+        if (contentOffsetY > 10) {
+            this._scrollView.onScrollShouldSetResponder = false
+        }
+        if (contentOffsetY >= 0 && contentOffsetY <= (200 - naviBarHeight)) {
+            let opac = contentOffsetY / (200 - naviBarHeight)
+            this.cusNavi.setNativeProps({
+                style:{
+                    opacity: opac,
+                }
+            })
+        } else if (contentOffsetY > (200 - naviBarHeight)) {
+            if (this.cusNavi.props.style.opacity !== 1) {
+                this.cusNavi.setNativeProps({
+                    style:{
+                        opacity: 1,
+                    }
+                })
+            }
+        }
+    }
 
     render(){
         return(
             <View>
-                <View
-                    ref={(containView)=>this.containView= containView}
-                    style={{
-                        top:0,
-                    }}
-                    {...this._panResponder.panHandlers}
+                <ScrollView style = {{
+                    backgroundColor:'#2E8B57',
+                }}
+                            showsHorizontalScrollIndicator={false}
+                            ref={list=>this._scrollView=list}
+                            onScroll={(e)=>this._scrollViewOnScroll(e)}
+                            onTouchMove={(e)=>this._onTouchMove(e)}
+                            bounces={false}
+                            scrollEnabled={true}
+                            scrollEventThrottle={1}
                 >
-                    <ScrollView style = {{
-                        backgroundColor:'#2E8B57',
-                    }}
-                                showsHorizontalScrollIndicator={false}
-                                ref={list=>this._scrollView=list}
-                                onScroll={(e)=>this._scrollViewOnScroll(e)}
-                                bounces={false}
-                                scrollEnabled={false}
-                                scrollEventThrottle={1}
-                    >
-                        {
-                            this.headerViewComponent()
-                        }
-                        <FlatList ref={(c)=>this._sectionList = c}
-                                  data={this.state.dataSourceArr}
-                                  style={styles.tableViewLayout}
-                            // ListHeaderComponent={()=>this.headerViewComponent()}
-                            //          sections={[ // 不同section渲染相同类型的子组件
-                            //              {data:this.state.dataSourceArr, renderItem:({item, index})=> this._firstSection(item, index)},
-                            //          ]}
-                                  renderItem={({item, index})=>this._firstSection(item, index)}
-                                  keyExtractor={(item)=>item.title}
-                                  onScroll={(e)=>{this._sectionListScroll(e)}}
-                                  scrollEventThrottle={1}  //监听频率
-                                  scrollEnabled={true}
-                                  refreshControl={
-                                      <RefreshControl
-                                          refreshing={this.state.isRefreshing}
-                                          onRefresh={this._onRefresh}
-                                          tintColor="#cccccc"
-                                          title="Loading..."
-                                          titleColor="#000000"
-                                          colors={['#ff0000', '#00ff00', '#0000ff']}
-                                          progressBackgroundColor="#ffff00"
-                                      />
-                                  }>
-                        </FlatList>
-                    </ScrollView>
+                    {
+                        this.headerViewComponent()
+                    }
+                    <FlatList ref={(c)=>this._sectionList = c}
+                              data={this.state.dataSourceArr}
+                              style={styles.tableViewLayout}
+                        // ListHeaderComponent={()=>this.headerViewComponent()}
+                        //          sections={[ // 不同section渲染相同类型的子组件
+                        //              {data:this.state.dataSourceArr, renderItem:({item, index})=> this._firstSection(item, index)},
+                        //          ]}
+                              renderItem={({item, index})=>this._firstSection(item, index)}
+                              keyExtractor={(item)=>item.title}
+                              onScroll={(e)=>{this._sectionListScroll(e)}}
+                              scrollEventThrottle={1}  //监听频率
+                              scrollEnabled={true}
+                              refreshControl={
+                                  <RefreshControl
+                                      refreshing={this.state.isRefreshing}
+                                      onRefresh={this._onRefresh}
+                                      tintColor="#cccccc"
+                                      title="Loading..."
+                                      titleColor="#000000"
+                                      colors={['#ff0000', '#00ff00', '#0000ff']}
+                                      progressBackgroundColor="#ffff00"
+                                  />
+                              }>
+                    </FlatList>
+                </ScrollView>
 
-                </View>
 
                 <View style={{
                     width:kScreenWidth,
@@ -433,7 +448,7 @@ export default class LOLSpeicalColumnDetailController extends React.Component
     }
 }
 
-
+let before_locationY = 0
 
 const styles = StyleSheet.create({
     columnViewContainer: {

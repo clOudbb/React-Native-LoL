@@ -35,6 +35,7 @@ import {
     Dimensions,
     TouchableHighlight,
     Image,
+    Alert,
 } from 'react-native';
 
 export default class SpecialColumnHeadView extends React.Component
@@ -69,6 +70,12 @@ export default class SpecialColumnHeadView extends React.Component
             }
         }
         return isSub
+    }
+
+    _subsriAction() {
+        let isSub = this._getIsSubState()
+        isSub?Alert.alert('已取消订阅'):Alert.alert('已订阅')
+        this.props._subscribe(_reduxSubscribeType, this.props.section, this.props.index, isSub)
     }
 
     render(){

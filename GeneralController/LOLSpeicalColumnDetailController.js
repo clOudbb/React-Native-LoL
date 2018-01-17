@@ -392,7 +392,7 @@ export default class LOLSpeicalColumnDetailController extends React.Component
                     </FlatList>
                 </ScrollView>
 
-
+                {/* 返回按钮 */}
                 <View style={{
                     width:kScreenWidth,
                     height:naviBarHeight,

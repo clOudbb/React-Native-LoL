@@ -36,22 +36,30 @@ import {
     TouchableHighlight,
     Image,
     Alert,
+    Button,
 } from 'react-native';
 
 class SpecialColumnHeadView extends React.Component
 {
     constructor(props){
         super(props)
+        const {store} = this.props
+        const state = store.getState()
+
         this.state = {
             isRefreshing:false,
+            subArr : state._subscribeArray
         }
 
+    }
+
+    shouldComponentUpdate(nextProps, nextState) {
+        return true
     }
 
     componentDidMount() {
 
     }
-
 
     setNativeProps(props){
         this.e.setNativeProps(props)
@@ -76,6 +84,12 @@ class SpecialColumnHeadView extends React.Component
         let isSub = this._getIsSubState()
         isSub?Alert.alert('已取消订阅'):Alert.alert('已订阅')
         this.props._subscribe(_reduxSubscribeType, this.props.section, this.props.index, isSub)
+
+        const {store} = this.props
+        const state = store.getState()
+        this.setState({
+            subArr : state._subscribeArray
+        })
     }
 
     render(){
@@ -104,15 +118,25 @@ class SpecialColumnHeadView extends React.Component
                         right:cellMargin,
                         bottom:cellMargin,
                     }} numberOfLines={1}>{item.col_des}</Text>
-                    <TouchableHighlight onPress={()=>this._subsriAction()}
-                                        underlayColor='#cccccc' style={[styles.subscribeButton, isButtonSub?{backgroundColor:'#802a2a'}:null]}>
-                        <View style={{flex:1,justifyContent:'center'}}>
-                            <Text style={isButtonSub?{fontSize:16, color:'#ffffff'}:{fontSize:16, color:'#802A2A'}}>
-                                {isButtonSub?'已订阅':'订阅'}
-                            </Text>
-                        </View>
-                    </TouchableHighlight>
+
+
                 </View>
+                {/**
+                 * 这里很奇怪，TouchableHighlight未知原因响应区域只有一半
+                 * 目前原因不明，有可能是RN的问题
+                 * 但是在外部又是没问题的，有可能是嵌套层次太多会导致
+                 * 目前还无法解决
+                 */}
+                <TouchableHighlight onPress={()=>this._subsriAction()}
+                                    underlayColor='#cccccc' style={[styles.subscribeButton, isButtonSub?{backgroundColor:'#802a2a'}:null]}>
+                    <View style={{flex:1,justifyContent:'center',alignItems:'center'}}>
+                        <Text style={[isButtonSub?{fontSize:16, color:'#ffffff'}:{fontSize:16, color:'#802A2A'},
+                            {
+                            }]}>
+                            {isButtonSub?'已订阅':'订阅'}
+                        </Text>
+                    </View>
+                </TouchableHighlight>
             </View>
         )
     }
@@ -162,8 +186,6 @@ const styles = StyleSheet.create({
     },
 
     subscribeButton:{
-        justifyContent:'center',
-        alignItems:'center',
         borderWidth:1,
         width:70,
         height:30,

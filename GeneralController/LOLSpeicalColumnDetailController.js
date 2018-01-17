@@ -328,32 +328,10 @@ export default class LOLSpeicalColumnDetailController extends React.Component
         return true
     }
 
-    /**
-     *  scroll View call back function
-     */
-    _onTouchMove(e){
-        // let now_locationY = e.nativeEvent.locationY
-        // console.log('now = ' + now_locationY)
-        // console.log('before = ' + before_locationY)
-        //
-        // if (tempScrollOffsetY <= 0) {
-        //     if (before_locationY !== 0) {
-        //         this._sectionList.scrollToOffset({
-        //             animated:false,
-        //             offset:now_locationY - before_locationY,
-        //         })
-        //     }
-        //     before_locationY = e.nativeEvent.locationY
-        // }
-    }
-
 
     _scrollViewOnScroll(e){
         var contentOffsetY = e.nativeEvent.contentOffset.y
         tempScrollOffsetY = contentOffsetY
-        if (contentOffsetY > 10) {
-            this._scrollView.onScrollShouldSetResponder = false
-        }
         if (contentOffsetY >= 0 && contentOffsetY <= (200 - naviBarHeight)) {
             let opac = contentOffsetY / (200 - naviBarHeight)
             this.cusNavi.setNativeProps({
@@ -381,7 +359,6 @@ export default class LOLSpeicalColumnDetailController extends React.Component
                             showsHorizontalScrollIndicator={false}
                             ref={list=>this._scrollView=list}
                             onScroll={(e)=>this._scrollViewOnScroll(e)}
-                            onTouchMove={(e)=>this._onTouchMove(e)}
                             bounces={false}
                             scrollEnabled={true}
                             scrollEventThrottle={1}
@@ -447,8 +424,6 @@ export default class LOLSpeicalColumnDetailController extends React.Component
         )
     }
 }
-
-let before_locationY = 0
 
 const styles = StyleSheet.create({
     columnViewContainer: {

@@ -38,7 +38,7 @@ import {
     Alert,
 } from 'react-native';
 
-export default class SpecialColumnHeadView extends React.Component
+class SpecialColumnHeadView extends React.Component
 {
     constructor(props){
         super(props)
@@ -120,6 +120,11 @@ export default class SpecialColumnHeadView extends React.Component
 
 
 let isButtonSub = false
+
+export default connect(
+    mapToSubScribe,
+    mapDispatchProps,
+)(SpecialColumnHeadView)
 
 const styles = StyleSheet.create({
     columnViewContainer: {

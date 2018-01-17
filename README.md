@@ -24,7 +24,7 @@ then
 
 ```shell
 cd ios
-pod install --verbose --no-repo-update
+pod install
 cd ..
 ```
 then

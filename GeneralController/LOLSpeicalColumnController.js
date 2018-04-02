@@ -57,6 +57,13 @@ import {
     connect,
 } from 'react-redux'
 
+/**
+ * test 使用原生模块
+ */
+import { requireNativeComponent } from 'react-native';
+
+var RCTAlertView = requireNativeComponent('RCTAlertView', RCTAlertView);
+
 let isButtonSub = false
 class SpeicalColumnCell extends React.Component
 {
@@ -67,6 +74,7 @@ class SpeicalColumnCell extends React.Component
     componentDidMount() {
 
     }
+
 
     componentWillUnmount() {
 
@@ -144,6 +152,7 @@ class SpeicalColumnCell extends React.Component
     }
 }
 
+
 class LOLSpeicalColumnController extends React.Component
 {
     constructor(props){
@@ -156,6 +165,7 @@ class LOLSpeicalColumnController extends React.Component
     }
     componentDidMount(){
         this._listRemote()
+
     }
 
     _touchAction = (item, index, section)=>{

@@ -263,7 +263,6 @@ class LOLSpeicalColumnController extends React.Component
                                      progressBackgroundColor="#ffff00"
                                  />
                              }
-
                 >
                 </SectionList>
             </View>
